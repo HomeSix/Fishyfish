@@ -29,7 +29,7 @@ class Player extends PositionComponent {
     // Draw a red square
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.x, size.y),
-      Paint()..color = const ui.Color.fromARGB(255, 255, 0, 0),
+      Paint()..color = const Color.fromARGB(255, 255, 255, 255),
     );
   }
 }
