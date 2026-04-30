@@ -94,6 +94,26 @@ if the sea stuff = trash, player can collect it and trash it somewhere?
  movement
   - afif
  research
-  - 
+  - apiz
+ lore
+  - apiz
 
- 
+
+LORE : Fishyfish
+
+Dahulu, lautan dikenali sebagai “Laut Biru Abadi” — tempat yang penuh dengan kehidupan, warna, dan keseimbangan antara manusia dan alam. Ikan-ikan berenang bebas, terumbu karang berkembang, dan hidupan laut hidup harmoni.
+
+Namun, lama-kelamaan, manusia mula mencemarkan laut dengan pelbagai bahan buangan — plastik, sisa toksik, dan sampah sarap. Laut yang dulunya jernih kini semakin keruh. Banyak hidupan laut jatuh sakit, habitat musnah, dan ada yang hampir pupus.
+
+Pemain mengambil peranan sebagai seorang penyelam muda yang berani, dihantar untuk meneroka dan memulihkan lautan. Setiap kali menyelam, pemain akan menemui pelbagai “sea stuff” yang yang masih hidup dan perlukan bantuan, ada juga yang telah rosak akibat pencemaran.
+
+Sepanjang perjalanan, pemain akan:
+
+- Membersihkan ikan dan membantu hidupan laut yang terjejas
+- Mengutip dan mengurus bahan buangan dengan betul
+- Belajar tentang jenis sampah dan kesannya terhadap alam
+- Meneroka kawasan laut berbeza yang semakin terjejas
+
+Namun, semakin dalam pemain menyelam, semakin jelas bahawa kerosakan ini bukan sesuatu yang kecil. Laut sedang “sakit”, dan hanya dengan usaha berterusan, keseimbangan itu boleh dikembalikan.
+
+Matlamat utama pemain bukan sekadar untuk bermain, tetapi untuk memulihkan Laut Biru Abadi dan mengembalikan harapan kepada semua hidupan laut.
