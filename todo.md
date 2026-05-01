@@ -19,6 +19,12 @@ GAME MECHANIC TO ADD
 5. Dash (?)
 6. door to somewhere else, like walking into a door then loading screen then kaboom im somwhere else now
 7. Save Mechanic
+8. Collision
+9. Camera follow Main Character (✔️)
+10. NPC Mechanic
+11. Tile map setting ( Mavinesh )
+12. chat dialogue
+13. 
 
 sea stuff :
 1. fish?
