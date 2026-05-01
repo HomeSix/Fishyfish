@@ -11,6 +11,14 @@ every game run start with the diver diving into water,
 
 then mc finds sea stuff (dono yet),
 
+GAME MECHANIC TO ADD
+1. Walking (✔️)
+2. Interact (like press E to interract)
+3. Open up MENU
+4. Front page (the main menu page)
+5. Dash (?)
+6. door to somewhere else, like walking into a door then loading screen then kaboom im somwhere else now
+
 sea stuff :
 1. fish?
 2. wild animals
