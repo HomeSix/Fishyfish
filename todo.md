@@ -18,6 +18,7 @@ GAME MECHANIC TO ADD
 4. Front page (the main menu page)
 5. Dash (?)
 6. door to somewhere else, like walking into a door then loading screen then kaboom im somwhere else now
+7. Save Mechanic
 
 sea stuff :
 1. fish?
