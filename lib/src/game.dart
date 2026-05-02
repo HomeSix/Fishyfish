@@ -14,30 +14,29 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // Background/Tilemap
+    // Background/Tilemap - add to the default world
     background = BackgroundComponent();
-    await add(background);
+    await world.add(background);
 
     final image = await images.load('Apin.png');
 
-    // Player
+    // Player - add to the default world
     player = Player(image);
-    await add(player);
+    await world.add(player);
 
-    // Joystick
+    // Joystick - add to camera viewport (stays on screen)
     joystick = createJoystick();
-    add(joystick);
+    camera.viewport.add(joystick);
 
-    // Camera
+    // Camera setup
     camera.viewfinder.anchor = Anchor.center;
-    camera.follow(player);
+    camera.follow(player, maxSpeed: double.infinity);
   }
   
 
   @override
   void update(double dt) {
-    super.update(dt);
-
     player.updateMovement(joystick, dt, size);
+    super.update(dt);
   }
 }

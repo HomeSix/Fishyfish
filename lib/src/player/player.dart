@@ -45,20 +45,13 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     _previousPosition = position.clone();
 
 
-    To see hitboxes of player and collission boxes
+    // To see hitboxes of player and collission boxes
     // debugMode = true;
 
     add(RectangleHitbox(
       position: Vector2(characterSize * 0.35, characterSize * 0.50),
       size: Vector2(characterSize * 0.3, characterSize * 0.25),
     )..collisionType = CollisionType.active);
-  }
-
-  void _clampToBounds() {
-    position.clamp(
-      Vector2(size.x / 2, size.y / 2),
-      Vector2(_gameSize.x - size.x / 2, _gameSize.y - size.y / 2),
-    );
   }
 
   void updateMovement(JoystickComponent joystick, double dt, Vector2 gameSize) {
@@ -98,8 +91,6 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
       animation = idleAnimation;
       direction = 0;
     }
-
-    _clampToBounds();
   }
 
   @override
@@ -126,8 +117,6 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
         position.y = _previousPosition.y;
       }
     }
-
-    _clampToBounds();
   }
 
   @override
