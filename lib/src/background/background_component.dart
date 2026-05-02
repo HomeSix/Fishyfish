@@ -11,7 +11,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    map = await TiledComponent.load('map.tmx', Vector2.all(16));
+    map = await TiledComponent.load('map1/map.tmx', Vector2.all(16));
     await add(map);
 
     _setupCollision();

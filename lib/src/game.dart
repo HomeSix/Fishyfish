@@ -1,9 +1,9 @@
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 
-import '../src/player/player.dart';
-import '../src/joystick/joystick.dart';
-import '../src/background/background_component.dart';
+import 'player/player.dart';
+import 'onScreen/joystick.dart';
+import 'background/background_component.dart';
 
 class FishyFishGame extends FlameGame with HasCollisionDetection {
   late Player player;

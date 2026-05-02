@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="12" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
+  <tileset firstgid="1" name="spritefusion" tilewidth="16" tileheight="16" tilecount="24" columns="8">
+    <image source="spritesheet.png" width="128" height="48"/>
+  </tileset>
+  <layer id="1" name="Ground" width="12" height="11">
+    <properties>
+      <property name="collider" type="bool" value="false"/>
+    </properties>
+    <data encoding="csv">
+12,17,17,17,17,17,17,17,17,17,17,14,
+16,8,11,7,7,7,7,7,7,7,7,18,
+16,9,10,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+16,7,7,7,7,7,7,7,7,7,7,18,
+15,19,19,19,19,19,19,19,19,19,19,13
+    </data>
+  </layer>
+  <layer id="2" name="Walls" width="12" height="11">
+    <properties>
+      <property name="collider" type="bool" value="true"/>
+    </properties>
+    <data encoding="csv">
+3,1,1,1,1,1,1,1,1,1,1,6,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+2,0,0,0,0,0,0,0,0,0,0,2,
+4,1,1,1,1,1,1,1,1,1,1,5
+    </data>
+  </layer>
+</map>
