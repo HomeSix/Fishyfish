@@ -32,6 +32,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     camera.viewfinder.anchor = Anchor.center;
     camera.follow(player);
   }
+  
 
   @override
   void update(double dt) {

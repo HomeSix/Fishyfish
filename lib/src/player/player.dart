@@ -22,6 +22,11 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   Player(this.image) : super(anchor: Anchor.center);
 
   Vector2 _previousPosition = Vector2.zero();
+  late Vector2 _gameSize;
+
+  bool _collidingX = false;
+  bool _collidingY = false;
+  Vector2 _intendedMovement = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
@@ -34,33 +39,44 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     idleAnimation = createColumnAnimation(spriteSheet, 0, 1, characterSpeed);
 
     animation = idleAnimation;
-    // Start at the front door (in front of the house)
     position = Vector2(256, 340);
     size = Vector2.all(characterSize);
 
     _previousPosition = position.clone();
 
-    // Enable debug mode to show hitbox
-    debugMode = true;
 
-    // Add hitbox for collision detection (smaller, at feet level)
+    To see hitboxes of player and collission boxes
+    // debugMode = true;
+
     add(RectangleHitbox(
-      position: Vector2(characterSize * 0.3, characterSize * 0.65),
-      size: Vector2(characterSize * 0.4, characterSize * 0.3),
+      position: Vector2(characterSize * 0.35, characterSize * 0.50),
+      size: Vector2(characterSize * 0.3, characterSize * 0.25),
     )..collisionType = CollisionType.active);
   }
 
+  void _clampToBounds() {
+    position.clamp(
+      Vector2(size.x / 2, size.y / 2),
+      Vector2(_gameSize.x - size.x / 2, _gameSize.y - size.y / 2),
+    );
+  }
+
   void updateMovement(JoystickComponent joystick, double dt, Vector2 gameSize) {
+    _gameSize = gameSize;
     _previousPosition.setFrom(position);
+    _collidingX = false;
+    _collidingY = false;
+    _intendedMovement.setZero();
 
     if (joystick.direction != JoystickDirection.idle) {
       final delta = joystick.delta;
 
       if (delta.length > 0) {
-        final movement = delta.normalized() * speed * dt;
-        position += movement;
+        _intendedMovement = delta.normalized() * speed * dt;
 
-        // Fixed angle calculation for screen coordinates
+        position.x += _intendedMovement.x;
+        position.y += _intendedMovement.y;
+
         final angle = math.atan2(delta.y, delta.x);
         final degrees = (angle * 180 / math.pi + 360) % 360;
 
@@ -68,13 +84,13 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
           animation = rightAnimation;
           direction = 2;
         } else if (degrees >= 45 && degrees < 135) {
-          animation = downAnimation;   // Screen down
+          animation = downAnimation;
           direction = 3;
         } else if (degrees >= 135 && degrees < 225) {
           animation = leftAnimation;
           direction = 1;
         } else {
-          animation = upAnimation;     // Screen up
+          animation = upAnimation;
           direction = 4;
         }
       }
@@ -83,17 +99,41 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
       direction = 0;
     }
 
-    // Keep player in bounds
-    position.clamp(
-      Vector2(size.x / 2, size.y / 2),
-      Vector2(gameSize.x - size.x / 2, gameSize.y - size.y / 2),
-    );
+    _clampToBounds();
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    // Revert to previous position when hitting something
-    position.setFrom(_previousPosition);
+
+    if (intersectionPoints.isEmpty) return;
+
+    final collisionPoint = intersectionPoints.reduce((a, b) => a + b)
+      ..scale(1 / intersectionPoints.length);
+
+    final toCollision = collisionPoint - position;
+    final absX = toCollision.x.abs();
+    final absY = toCollision.y.abs();
+
+    if (absX > absY) {
+      if (!_collidingX) {
+        _collidingX = true;
+        position.x = _previousPosition.x;
+      }
+    } else {
+      if (!_collidingY) {
+        _collidingY = true;
+        position.y = _previousPosition.y;
+      }
+    }
+
+    _clampToBounds();
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    _collidingX = false;
+    _collidingY = false;
   }
 }
