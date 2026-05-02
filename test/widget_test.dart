@@ -8,12 +8,13 @@
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:special_topics_game/main.dart';
+import 'package:special_topics_game/src/game.dart';
 
 void main() {
   testWidgets('Flame game initializes', (WidgetTester tester) async {
     // Build our game and trigger a frame.
     await tester.pumpWidget(
-      GameWidget(game: MyGame()),
+      GameWidget(game: FishyFishGame()),
     );
 
     // Verify the GameWidget renders without errors
