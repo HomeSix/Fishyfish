@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
-import 'src/game.dart';
+import 'src/ui/main_menu_page.dart';
 
 void main() {
-  runApp(GameWidget(game: FishyFishGame()));
+  runApp(const FishyFishApp());
+}
+
+class FishyFishApp extends StatelessWidget {
+  const FishyFishApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'FishyFish',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: const Color(0xFF1B7C8C),
+      ),
+      home: const MainMenuPage(),
+    );
+  }
 }
