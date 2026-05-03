@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="73" height="35" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1">
   <tileset firstgid="1" name="spritefusion" tilewidth="16" tileheight="16" tilecount="328" columns="8">
-    <image source="spritesheet.png" width="128" height="656"/>
+    <image source="../tiles/map1/spritesheet.png" width="128" height="656"/>
   </tileset>
   <layer id="1" name="Water" width="73" height="35">
     <properties>

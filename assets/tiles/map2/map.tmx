@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="12" height="11" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
   <tileset firstgid="1" name="spritefusion" tilewidth="16" tileheight="16" tilecount="24" columns="8">
-    <image source="spritesheet.png" width="128" height="48"/>
+    <image source="../tiles/map2/spritesheet.png" width="128" height="48"/>
   </tileset>
   <layer id="1" name="Ground" width="12" height="11">
     <properties>

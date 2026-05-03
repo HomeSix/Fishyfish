@@ -6,12 +6,15 @@ import 'package:tiled/tiled.dart' as tiled;
 class BackgroundComponent extends PositionComponent with HasGameReference {
   late TiledComponent map;
   final List<RectangleHitbox> collisionBlocks = [];
+  final String mapName;
+
+  BackgroundComponent({this.mapName = 'map1'});
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    map = await TiledComponent.load('map1/map.tmx', Vector2.all(16));
+    map = await TiledComponent.load('$mapName/map.tmx', Vector2.all(16));
     await add(map);
 
     _setupCollision();
