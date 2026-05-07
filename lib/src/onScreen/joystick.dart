@@ -11,6 +11,6 @@ JoystickComponent createJoystick() {
       radius: 60,
       paint: Paint()..color = Colors.grey.withOpacity(0.5),
     ),
-    margin: const EdgeInsets.only(left: 40, bottom: 40),
+    margin: const EdgeInsets.only(left: 130, bottom: 75),
   );
 }

@@ -11,6 +11,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   late BackgroundComponent background;
   String currentMap = 'map1';
   bool showDebugCoordinates = false; // Set to true when placing zones
+  
+  // Define transition zones
+  late PolygonComponent map1ToMap2Zone;
 
   @override
   Future<void> onLoad() async {
@@ -34,10 +37,16 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     camera.viewfinder.anchor = Anchor.center;
     camera.follow(player, maxSpeed: double.infinity);
 
-    
+    // Initialize transition zones
+    map1ToMap2Zone = PolygonComponent([
+      Vector2(225, 283),
+      Vector2(260, 283),
+      Vector2(240, 290),
+      Vector2(253, 290),
+    ]);
   }
 
-  Future<void> changeMap(String newMap) async {
+  Future<void> changeMap(String newMap, {Vector2? newPosition}) async {
     // Remove old background
     background.removeFromParent();
     
@@ -45,6 +54,11 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     currentMap = newMap;
     background = BackgroundComponent(mapName: newMap);
     await world.add(background);
+    
+    // Set player position if provided
+    if (newPosition != null) {
+      player.position = newPosition;
+    }
   }
   
 
@@ -56,16 +70,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       print('Player: ${player.position}');
     }
     
-    // Check for map transitions using polygon
-    final map1ToMap2Zone = PolygonComponent([
-      Vector2(240, 283),
-      Vector2(253, 283),
-      Vector2(240, 290),
-      Vector2(253, 290),
-    ]);
-
+    // Check for map transitions
     if (currentMap == 'map1' && map1ToMap2Zone.containsPoint(player.position)) {
-      changeMap('map2');
+      changeMap('map2', newPosition: Vector2(100, 100)); // Set desired spawn position
     }
     
     super.update(dt);

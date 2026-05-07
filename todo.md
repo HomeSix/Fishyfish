@@ -14,15 +14,15 @@ then mc finds sea stuff (dono yet),
 GAME MECHANIC TO ADD
 1. Walking (✔️)
 2. Interact (like press E to interract)
-3. Open up MENU
-4. Front page (the main menu page)
-5. Dash (?)
-6. door to somewhere else, like walking into a door then loading screen then kaboom im somwhere else now
-7. Save Mechanic
-8. Collision
+3. Open up MENU (✖️)
+4. Front page (the main menu page) (✔️) 
+5. Dash (✖️)
+6. door to somewhere else, like walking into a door then loading screen then kaboom im somwhere else now (Done) by afif (✔️)
+7. Save Mechanic (make it auto save)
+8. Collision (✔️)
 9. Camera follow Main Character (✔️)
 10. NPC Mechanic
-11. Tile map setting ( Mavinesh )
+11. Tile map setting ( Mavinesh ) (✖️)
 12. chat dialogue
 13. 
 
