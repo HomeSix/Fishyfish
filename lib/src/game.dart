@@ -6,12 +6,20 @@ import 'onScreen/joystick.dart';
 import 'background/background_component.dart';
 
 class FishyFishGame extends FlameGame with HasCollisionDetection {
+
   late Player player;
   late JoystickComponent joystick;
   late BackgroundComponent background;
   String currentMap = 'map1';
   bool showDebugCoordinates = false; // Set to true when placing zones
-  
+
+  // Inventory system
+  List<String> inventory = ["test item", "mavinesh"]; // Example starting item
+  void addItemToInventory(String item) {
+    inventory.add(item);
+    // Optionally: trigger overlay update if open
+  }
+
   // Define transition zones
   late PolygonComponent map1ToMap2Zone;
 
@@ -60,7 +68,6 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       player.position = newPosition;
     }
   }
-  
 
   @override
   void update(double dt) {
