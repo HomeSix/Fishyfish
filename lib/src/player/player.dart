@@ -39,7 +39,7 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     // To see hitboxes of player and collission boxes
     // debugMode = true;
     _playerHitbox = RectangleHitbox(
-      position: Vector2(characterSize * 0.35, characterSize * 0.50),
+      position: Vector2(characterSize * 0.35, (characterSize - characterSize * 0.25) / 2),
       size: Vector2(characterSize * 0.3, characterSize * 0.25),
     )..collisionType = CollisionType.active;
     add(_playerHitbox);
@@ -84,25 +84,13 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (intersectionPoints.isEmpty) return;
-    final collisionPoint = intersectionPoints.reduce((a, b) => a + b)
-      ..scale(1 / intersectionPoints.length);
-    final hitboxCenter = Vector2(
-      position.x - size.x / 2 + _playerHitbox.position.x + _playerHitbox.size.x / 2,
-      position.y - size.y / 2 + _playerHitbox.position.y + _playerHitbox.size.y / 2,
-    );
-    final toCollision = collisionPoint - hitboxCenter;
-    final absX = toCollision.x.abs();
-    final absY = toCollision.y.abs();
-    if (absX > absY) {
-      if (!_collidingX) {
-        _collidingX = true;
-        position.x = _previousPosition.x;
-      }
-    } else {
-      if (!_collidingY) {
-        _collidingY = true;
-        position.y = _previousPosition.y;
-      }
+    if (!_collidingX) {
+      _collidingX = true;
+      position.x = _previousPosition.x;
+    }
+    if (!_collidingY) {
+      _collidingY = true;
+      position.y = _previousPosition.y;
     }
   }
 

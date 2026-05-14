@@ -20,9 +20,9 @@ class GeorgeNPC extends SpriteComponent with CollisionCallbacks {
     position = Vector2(448, 270);
     add(
       RectangleHitbox(
-        position: Vector2(size.x * 0.2, size.y * 0.2),
-        size: Vector2(size.x * 0.6, size.y * 0.6),
-      )..collisionType = CollisionType.passive,
+        position: Vector2(size.x * 0.2, size.y * 0.3 - 1),
+        size: Vector2(size.x * 0.6, size.y * 0.6 + 2),
+      )..collisionType = CollisionType.active,
     );
     debugMode = true;
   }
