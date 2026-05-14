@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' show Image;
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
@@ -8,14 +9,15 @@ import 'background/background_component.dart';
 import 'npc/george.dart';
 import 'ui/interact_button.dart';
 import 'ui/dialogue_box.dart';
+import 'onScreen/inventory_button.dart';
 
 class FishyFishGame extends FlameGame with HasCollisionDetection {
-
   late Player player;
   late JoystickComponent joystick;
   late BackgroundComponent background;
   late GeorgeNPC george;
   late InteractButton interactButton;
+  late InventoryButton inventoryButton;
   late DialogueBox dialogueBox;
   late Image _georgeImage;
   String currentMap = 'map1';
@@ -63,7 +65,23 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
           dialogueBox.dismiss();
         } else {
           final dist = (player.position - george.position).length;
-          if (dist < 250) {
+          if (dist < 50) {
+            final diff = george.position - player.position;
+            final angle = math.atan2(diff.y, diff.x);
+            final degrees = (angle * 180 / math.pi + 360) % 360;
+            if (degrees >= 315 || degrees < 45) {
+              player.animation = player.rightAnimation;
+              player.direction = 2;
+            } else if (degrees >= 45 && degrees < 135) {
+              player.animation = player.downAnimation;
+              player.direction = 3;
+            } else if (degrees >= 135 && degrees < 225) {
+              player.animation = player.leftAnimation;
+              player.direction = 1;
+            } else {
+              player.animation = player.upAnimation;
+              player.direction = 4;
+            }
             dialogueBox.show('George', 'Do you know? Hafiz is gay');
           }
         }
@@ -71,6 +89,14 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     );
     interactButton.position = Vector2(size.x - 90, size.y - 135);
     camera.viewport.add(interactButton);
+
+    inventoryButton = InventoryButton(
+      onTap: () {
+        overlays.add('InventoryOverlay');
+      },
+    );
+    inventoryButton.position = Vector2(size.x - 230, size.y - 135);
+    camera.viewport.add(inventoryButton);
 
     // Dialogue box - bottom of screen
     dialogueBox = DialogueBox();
@@ -109,22 +135,22 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   Future<void> changeMap(String newMap, {Vector2? newPosition}) async {
     background.removeFromParent();
-    
+
     if (currentMap == 'map1') {
       george.removeFromParent();
     }
-    
+
     currentMap = newMap;
     background = BackgroundComponent(mapName: newMap);
     background.priority = -1;
     await world.add(background);
-    
+
     if (currentMap == 'map1') {
       george = GeorgeNPC(_georgeImage);
       george.position = Vector2(448, 270);
       await world.add(george);
     }
-    
+
     if (newPosition != null) {
       player.position = newPosition;
     }
@@ -136,24 +162,24 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     george.priority = george.position.y.toInt();
     player.priority = player.position.y.toInt();
-    
+
     if (showDebugCoordinates) {
       print('Player: ${player.position}');
     }
-    
+
     // Check for map transitions
     if (currentMap == 'map1' && map1ToMap2Zone.containsPoint(player.position)) {
       changeMap('map2', newPosition: Vector2(100, 100));
     }
-    
+
     if (currentMap == 'map1' && houseDoorZone.containsPoint(player.position)) {
       changeMap('house', newPosition: Vector2(136, 178));
     }
-    
+
     if (currentMap == 'house' && houseExitZone.containsPoint(player.position)) {
       changeMap('map1', newPosition: Vector2(248, 340));
     }
-    
+
     super.update(dt);
   }
 }

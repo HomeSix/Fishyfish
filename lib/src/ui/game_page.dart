@@ -2,7 +2,6 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 import '../game.dart';
-import '../onScreen/inventory_button.dart';
 import '../onScreen/inventory_overlay.dart';
 
 class GamePage extends StatefulWidget {
@@ -27,10 +26,8 @@ class _GamePageState extends State<GamePage> {
       body: GameWidget(
         game: _game,
         overlayBuilderMap: {
-          'InventoryButton': (ctx, FishyFishGame game) => InventoryButton(game: game),
           'InventoryOverlay': (ctx, FishyFishGame game) => InventoryOverlay(game: game),
         },
-        initialActiveOverlays: const ['InventoryButton'],
       ),
     );
   }
