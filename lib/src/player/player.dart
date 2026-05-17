@@ -7,7 +7,7 @@ import '../utils/animation_helper.dart';
 
 class Player extends SpriteAnimationComponent with CollisionCallbacks {
   final double speed = 200;
-  final double characterSize = 100;
+  final double characterSize = 110;
   final double characterSpeed = 0.15;
   final Image image;
   late SpriteAnimation downAnimation;
@@ -40,14 +40,14 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     idleUpAnimation = createColumnAnimation(spriteSheet, 2, 1, characterSpeed);
     idleRightAnimation = createColumnAnimation(spriteSheet, 3, 1, characterSpeed);
     animation = idleDownAnimation;
-    position = Vector2(256, 340);
+    position = Vector2(256 + 15, 640);
     size = Vector2.all(characterSize);
     _previousPosition = position.clone();
     // To see hitboxes of player and collission boxes
     // debugMode = true;
     _playerHitbox = RectangleHitbox(
-      position: Vector2(characterSize * 0.35, (characterSize - characterSize * 0.25) / 2),
-      size: Vector2(characterSize * 0.3, characterSize * 0.25),
+      position: Vector2(characterSize * 0.38, characterSize * 0.52),
+      size: Vector2(characterSize * 0.24, characterSize * 0.36),
     )..collisionType = CollisionType.active;
     add(_playerHitbox);
   }

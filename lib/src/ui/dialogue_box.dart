@@ -22,6 +22,11 @@ class DialogueBox extends PositionComponent with TapCallbacks {
   }
 
   @override
+  bool containsLocalPoint(Vector2 point) {
+    return _isVisible && super.containsLocalPoint(point);
+  }
+
+  @override
   void render(Canvas canvas) {
     if (!_isVisible) return;
 

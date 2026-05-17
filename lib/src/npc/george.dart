@@ -17,7 +17,7 @@ class GeorgeNPC extends SpriteComponent with CollisionCallbacks {
     );
     // Change this Vector2.all value to resize George (80 = current, 100 = player size)
     size = Vector2.all(80);
-    position = Vector2(448, 270);
+    position = Vector2(476, 750);
     add(
       RectangleHitbox(
         position: Vector2(size.x * 0.2, size.y * 0.3 - 1),

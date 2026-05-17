@@ -21,7 +21,7 @@ class GameWorld extends World {
 
     // Player
     player = Player(playerImage);
-    player.position = Vector2(256, 340);
+    player.position = Vector2(2056, 1000);
     await add(player);
   }
 }

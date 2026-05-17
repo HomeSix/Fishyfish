@@ -2,11 +2,16 @@ import 'dart:math' as math;
 import 'dart:ui' show Image;
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
+import 'package:flame/collisions.dart';
 
 import 'player/player.dart';
 import 'onScreen/joystick.dart';
 import 'background/background_component.dart';
 import 'npc/george.dart';
+import 'items/banana_peel.dart';
+import 'package:flame/sprite.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:ui' as ui show instantiateImageCodec;
 import 'onScreen/interact_button.dart';
 import 'ui/dialogue_box.dart';
 import 'onScreen/inventory_button.dart';
@@ -20,8 +25,13 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   late InventoryButton inventoryButton;
   late DialogueBox dialogueBox;
   late Image _georgeImage;
+  late Image _bananaImage;
+  BananaPeel? banana;
+  SpriteComponent? heldItem;
+  final Map<PositionComponent, _InteractionTarget> _itemTargets = {};
   String currentMap = 'map1';
   bool showDebugCoordinates = false; // Set to true when placing zones
+  bool _hudReady = false;
   final List<_InteractionTarget> _interactionTargets = [];
 
   // Inventory system
@@ -58,11 +68,38 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       _InteractionTarget(
         position: () => george.position,
         range: 50,
+        label: 'talk',
         onInteract: () {
           dialogueBox.show('George', 'Do you know? Hafiz is gay');
         },
       ),
     );
+
+    // Banana peel item - load and place on the map
+    final data = await rootBundle.load('assets/trash/bananaPeel.png');
+    final bytes = data.buffer.asUint8List();
+    final codec = await ui.instantiateImageCodec(bytes);
+    final frame = await codec.getNextFrame();
+    _bananaImage = frame.image;
+    banana = BananaPeel(
+      sprite: Sprite(_bananaImage),
+      size: Vector2(48, 48),
+      position: Vector2(300, 680),
+    );
+    await world.add(banana!);
+    final bananaTarget = _InteractionTarget(
+      position: () => banana!.position,
+      range: 50,
+      label: 'pick up',
+      onInteract: () {
+        _pickupItem(banana!);
+      },
+    );
+    _interactionTargets.add(bananaTarget);
+    _itemTargets[banana!] = bananaTarget;
+
+    // Scatter remaining trash assets across the map
+    await _scatterTrash();
 
     // Joystick - add to camera viewport (stays on screen)
     joystick = createJoystick();
@@ -72,7 +109,6 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     interactButton = InteractButton(
       onTap: _handleInteract,
     );
-    interactButton.position = Vector2(size.x - 90, size.y - 135);
     camera.viewport.add(interactButton);
 
     inventoryButton = InventoryButton(
@@ -80,8 +116,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         overlays.add('InventoryOverlay');
       },
     );
-    inventoryButton.position = Vector2(size.x - 230, size.y - 135);
     camera.viewport.add(inventoryButton);
+
+    _hudReady = true;
+    _updateHudLayout();
 
     // Dialogue box - bottom of screen
     dialogueBox = DialogueBox();
@@ -118,6 +156,98 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     ]);
   }
 
+  Future<void> _scatterTrash() async {
+    final files = [
+      'apple peel.png',
+      'bananaPeel.png',
+      'cardboard box.png',
+      'Origami Crane.png',
+      'Plastic Bag.png',
+      'Plastic Bottle.png',
+      'Tin.png',
+    ];
+
+    final rnd = math.Random();
+    final tileWidth = background.map.tileMap.map.tileWidth?.toDouble() ?? 64.0;
+    final tileHeight = background.map.tileMap.map.tileHeight?.toDouble() ?? 64.0;
+    final mapWidth = (background.map.tileMap.map.width ?? 10) * tileWidth;
+    final mapHeight = (background.map.tileMap.map.height ?? 10) * tileHeight;
+
+    for (final file in files) {
+      try {
+        final data = await rootBundle.load('assets/trash/$file');
+        final bytes = data.buffer.asUint8List();
+        final codec = await ui.instantiateImageCodec(bytes);
+        final frame = await codec.getNextFrame();
+        final img = frame.image;
+
+        // Choose size per asset (smaller crane, larger box)
+        final lower = file.toLowerCase();
+        final itemSize = (lower.contains('origami') || lower.contains('crane'))
+            ? Vector2(32, 32)
+            : (lower.contains('cardboard') || lower.contains('box'))
+                ? Vector2(64, 64)
+                : Vector2(48, 48);
+
+        // Try a few times to find a non-colliding position using the item size
+        Vector2? chosen;
+        for (var i = 0; i < 12; i++) {
+          final candidate = Vector2(rnd.nextDouble() * mapWidth, rnd.nextDouble() * mapHeight);
+          if (!_wouldCollideWithMap(candidate, itemSize)) {
+            chosen = candidate;
+            break;
+          }
+        }
+
+        chosen ??= _playerFeetDropPosition(itemSize);
+
+        final comp = BananaPeel(
+          sprite: Sprite(img),
+          size: itemSize,
+          position: chosen,
+        );
+        world.add(comp);
+
+        final target = _InteractionTarget(
+          position: () => comp.position,
+          range: 50,
+          label: 'pick up',
+          onInteract: () {
+            _pickupItem(comp);
+          },
+        );
+        _interactionTargets.add(target);
+        _itemTargets[comp] = target;
+      } catch (e) {
+        // ignore missing assets or decode errors
+      }
+    }
+  }
+
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
+    _updateHudLayout();
+  }
+
+  void _updateHudLayout() {
+    if (!_hudReady) {
+      return;
+    }
+
+    const edgeMargin = 24.0;
+    const buttonGap = 16.0;
+
+    final bottomRightX = size.x - edgeMargin - (inventoryButton.size.x / 2);
+    final bottomRightY = size.y - edgeMargin - (inventoryButton.size.y / 2);
+
+    inventoryButton.position = Vector2(bottomRightX, bottomRightY);
+    interactButton.position = Vector2(
+      bottomRightX,
+      bottomRightY - inventoryButton.size.y - buttonGap,
+    );
+  }
+
   Future<void> changeMap(String newMap, {Vector2? newPosition}) async {
     background.removeFromParent();
 
@@ -132,7 +262,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     if (currentMap == 'map1') {
       george = GeorgeNPC(_georgeImage);
-      george.position = Vector2(448, 270);
+      george.position = Vector2(476, 760);
       await world.add(george);
     }
 
@@ -152,20 +282,57 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       print('Player: ${player.position}');
     }
 
-    // Check for map transitions
-    if (currentMap == 'map1' && map1ToMap2Zone.containsPoint(player.position)) {
-      changeMap('map2', newPosition: Vector2(100, 100));
-    }
+    // Update interact button text based on available interactions
+    _updateInteractButtonText();
 
-    if (currentMap == 'map1' && houseDoorZone.containsPoint(player.position)) {
-      changeMap('house', newPosition: Vector2(136, 178));
-    }
+    // // Check for map transitions
+    // if (currentMap == 'map1' && map1ToMap2Zone.containsPoint(player.position)) {
+    //   changeMap('map2', newPosition: Vector2(100, 100));
+    // }
 
-    if (currentMap == 'house' && houseExitZone.containsPoint(player.position)) {
-      changeMap('map1', newPosition: Vector2(248, 340));
-    }
+    // if (currentMap == 'map1' && houseDoorZone.containsPoint(player.position)) {
+    //   changeMap('house', newPosition: Vector2(136, 178));
+    // }
+
+    // if (currentMap == 'house' && houseExitZone.containsPoint(player.position)) {
+    //   changeMap('map1', newPosition: Vector2(248, 340));
+    // }
 
     super.update(dt);
+  }
+
+  void _updateInteractButtonText() {
+    _InteractionTarget? closestTalk;
+    _InteractionTarget? closestOther;
+    var closestTalkDist = double.infinity;
+    var closestOtherDist = double.infinity;
+
+    for (final candidate in _interactionTargets) {
+      final distance = (player.position - candidate.position()).length;
+      if (distance <= candidate.range) {
+        if (candidate.label.toLowerCase() == 'talk') {
+          if (distance < closestTalkDist) {
+            closestTalkDist = distance;
+            closestTalk = candidate;
+          }
+        } else {
+          if (distance < closestOtherDist) {
+            closestOtherDist = distance;
+            closestOther = candidate;
+          }
+        }
+      }
+    }
+
+    if (closestTalk != null) {
+      interactButton.actionText = closestTalk.label;
+    } else if (heldItem != null) {
+      interactButton.actionText = 'drop';
+    } else if (closestOther != null) {
+      interactButton.actionText = closestOther.label;
+    } else {
+      interactButton.actionText = '...';
+    }
   }
 
   void _handleInteract() {
@@ -173,24 +340,173 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       dialogueBox.dismiss();
       return;
     }
-
-    _InteractionTarget? target;
-    var closestDistance = double.infinity;
+    _InteractionTarget? closestTalk;
+    _InteractionTarget? closestOther;
+    var closestTalkDist = double.infinity;
+    var closestOtherDist = double.infinity;
 
     for (final candidate in _interactionTargets) {
       final distance = (player.position - candidate.position()).length;
-      if (distance <= candidate.range && distance < closestDistance) {
-        closestDistance = distance;
-        target = candidate;
+      if (distance <= candidate.range) {
+        if (candidate.label.toLowerCase() == 'talk') {
+          if (distance < closestTalkDist) {
+            closestTalkDist = distance;
+            closestTalk = candidate;
+          }
+        } else {
+          if (distance < closestOtherDist) {
+            closestOtherDist = distance;
+            closestOther = candidate;
+          }
+        }
       }
     }
 
-    if (target == null) {
+    // Priority: talk > drop (if holding) > other interactions (e.g., pick up)
+    if (closestTalk != null) {
+      _facePlayerTowards(closestTalk.position());
+      closestTalk.onInteract();
       return;
     }
 
-    _facePlayerTowards(target.position());
-    target.onInteract();
+    if (heldItem != null) {
+      _dropHeldItem();
+      return;
+    }
+
+    if (closestOther != null) {
+      _facePlayerTowards(closestOther.position());
+      closestOther.onInteract();
+      return;
+    }
+  }
+
+  void _pickupItem(PositionComponent item) {
+    if (heldItem != null) return;
+
+    // Remove world target for this item
+    final target = _itemTargets.remove(item);
+    if (target != null) {
+      _interactionTargets.remove(target);
+    }
+
+    // Remove the item from the world
+    item.removeFromParent();
+
+    // Attach a sprite copy to the player (above head)
+    final sprite = (item is SpriteComponent) ? item.sprite : null;
+    // Place the held item over the player's hair: slightly right and a bit lower
+    heldItem = SpriteComponent(
+      sprite: sprite,
+      size: item.size,
+      anchor: Anchor.center,
+    );
+    player.add(heldItem!);
+    // Local position relative to player's center: x to the right, y negative to sit above head
+    // Adjust placement: move 5 pixels left and 15 pixels lower from previous values
+    heldItem!.position = Vector2(
+      // Nudge: 5px further left and additional 7px lower
+      player.size.x * 0.72 - 25,
+      -player.size.y * 0.45 + 67,
+    );
+    // Ensure it renders above the player
+    heldItem!.priority = player.priority + 1;
+  }
+
+  void _dropHeldItem() {
+    if (heldItem == null) return;
+
+    final dropPos = _findDropPosition();
+
+    final dropped = BananaPeel(
+      sprite: heldItem!.sprite,
+      size: heldItem!.size,
+      position: dropPos,
+    );
+    world.add(dropped);
+
+    final droppedTarget = _InteractionTarget(
+      position: () => dropped.position,
+      range: 50,
+      label: 'pick up',
+      onInteract: () {
+        _pickupItem(dropped);
+      },
+    );
+    _interactionTargets.add(droppedTarget);
+    _itemTargets[dropped] = droppedTarget;
+
+    heldItem!.removeFromParent();
+    heldItem = null;
+  }
+
+  Vector2 _findDropPosition() {
+    final itemSize = heldItem?.size.clone() ?? Vector2.all(48);
+    final frontDrop = player.position + _directionVector(player.direction) * 64.0;
+
+    if (!_wouldCollideWithMap(frontDrop, itemSize)) {
+      return frontDrop;
+    }
+
+    return _playerFeetDropPosition(itemSize);
+  }
+
+  Vector2 _playerFeetDropPosition(Vector2 itemSize) =>
+      player.position + Vector2(0, player.size.y / 2 - itemSize.y / 2);
+
+  Vector2 _directionVector(int direction) {
+    switch (direction) {
+      case 1:
+        return Vector2(-1, 0);
+      case 2:
+        return Vector2(1, 0);
+      case 4:
+        return Vector2(0, -1);
+      case 3:
+      default:
+        return Vector2(0, 1);
+    }
+  }
+
+  bool _wouldCollideWithMap(Vector2 centerPosition, Vector2 itemSize) {
+    final halfSize = itemSize / 2;
+    final left = centerPosition.x - halfSize.x;
+    final top = centerPosition.y - halfSize.y;
+    final right = left + itemSize.x;
+    final bottom = top + itemSize.y;
+
+    for (final hitbox in background.getCollisions()) {
+      final hitLeft = hitbox.position.x;
+      final hitTop = hitbox.position.y;
+      final hitRight = hitLeft + hitbox.size.x;
+      final hitBottom = hitTop + hitbox.size.y;
+
+      final overlaps = left < hitRight && right > hitLeft && top < hitBottom && bottom > hitTop;
+      if (overlaps) {
+        return true;
+      }
+    }
+
+    if (george.isMounted && _wouldCollideWithGeorge(centerPosition, itemSize)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  bool _wouldCollideWithGeorge(Vector2 centerPosition, Vector2 itemSize) {
+    final georgeLeft = george.position.x - george.size.x / 2 + george.size.x * 0.2;
+    final georgeTop = george.position.y - george.size.y / 2 + george.size.y * 0.3 - 1;
+    final georgeRight = georgeLeft + george.size.x * 0.6;
+    final georgeBottom = georgeTop + george.size.y * 0.6 + 2;
+
+    final halfSize = itemSize / 2;
+    final left = centerPosition.x - halfSize.x;
+    final top = centerPosition.y - halfSize.y;
+    final right = left + itemSize.x;
+    final bottom = top + itemSize.y;
+
+    return left < georgeRight && right > georgeLeft && top < georgeBottom && bottom > georgeTop;
   }
 
   void _facePlayerTowards(Vector2 targetPosition) {
@@ -218,10 +534,12 @@ class _InteractionTarget {
   _InteractionTarget({
     required this.position,
     required this.range,
+    required this.label,
     required this.onInteract,
   });
 
   final Vector2 Function() position;
   final double range;
+  final String label;
   final void Function() onInteract;
 }

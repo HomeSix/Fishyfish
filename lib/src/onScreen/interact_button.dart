@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide Route;
 class InteractButton extends PositionComponent with TapCallbacks {
   bool _isPressed = false;
   final VoidCallback? onTap;
+  String actionText = 'Interact';
 
   InteractButton({this.onTap})
       : super(
@@ -33,9 +34,9 @@ class InteractButton extends PositionComponent with TapCallbacks {
     );
 
     final tp = TextPainter(
-      text: const TextSpan(
-        text: 'Interact',
-        style: TextStyle(
+      text: TextSpan(
+        text: actionText,
+        style: const TextStyle(
           color: Colors.white,
           fontSize: 12,
           fontWeight: FontWeight.w600,

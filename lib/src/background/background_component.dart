@@ -14,7 +14,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    map = await TiledComponent.load('$mapName/map.tmx', Vector2.all(16));
+    map = await TiledComponent.load('$mapName/map.tmx', Vector2.all(64));
     await add(map);
 
     _setupCollision();
@@ -34,8 +34,8 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
       final tileData = layer.tileData;
       if (tileData == null) continue;
 
-      final tileWidth = map.tileMap.map.tileWidth?.toDouble() ?? 16.0;
-      final tileHeight = map.tileMap.map.tileHeight?.toDouble() ?? 16.0;
+      final tileWidth = map.tileMap.map.tileWidth?.toDouble() ?? 64.0;
+      final tileHeight = map.tileMap.map.tileHeight?.toDouble() ?? 64.0;
 
      for (var y = 0; y < tileData.length; y++) {
         for (var x = 0; x < tileData[y].length; x++) {
