@@ -14,8 +14,12 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   late SpriteAnimation leftAnimation;
   late SpriteAnimation rightAnimation;
   late SpriteAnimation upAnimation;
-  late SpriteAnimation idleAnimation;
-  int direction = 0;
+  late SpriteAnimation idleDownAnimation;
+  late SpriteAnimation idleLeftAnimation;
+  late SpriteAnimation idleRightAnimation;
+  late SpriteAnimation idleUpAnimation;
+  int direction = 3;
+  int _lastDirection = 3;
   Player(this.image) : super(anchor: Anchor.center);
   Vector2 _previousPosition = Vector2.zero();
   late Vector2 _gameSize;
@@ -31,8 +35,11 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     leftAnimation = createColumnAnimation(spriteSheet, 1, 8, characterSpeed);
     upAnimation = createColumnAnimation(spriteSheet, 2, 8, characterSpeed);
     rightAnimation = createColumnAnimation(spriteSheet, 3, 8, characterSpeed);
-    idleAnimation = createColumnAnimation(spriteSheet, 0, 1, characterSpeed);
-    animation = idleAnimation;
+    idleDownAnimation = createColumnAnimation(spriteSheet, 0, 1, characterSpeed);
+    idleLeftAnimation = createColumnAnimation(spriteSheet, 1, 1, characterSpeed);
+    idleUpAnimation = createColumnAnimation(spriteSheet, 2, 1, characterSpeed);
+    idleRightAnimation = createColumnAnimation(spriteSheet, 3, 1, characterSpeed);
+    animation = idleDownAnimation;
     position = Vector2(256, 340);
     size = Vector2.all(characterSize);
     _previousPosition = position.clone();
@@ -73,10 +80,32 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
           animation = upAnimation;
           direction = 4;
         }
+        _lastDirection = direction;
+      } else {
+        _setIdleAnimation(_lastDirection);
       }
     } else {
-      animation = idleAnimation;
-      direction = 0;
+      _setIdleAnimation(_lastDirection);
+    }
+  }
+
+  void _setIdleAnimation(int facingDirection) {
+    direction = facingDirection;
+
+    switch (facingDirection) {
+      case 1:
+        animation = idleLeftAnimation;
+        break;
+      case 2:
+        animation = idleRightAnimation;
+        break;
+      case 4:
+        animation = idleUpAnimation;
+        break;
+      case 3:
+      default:
+        animation = idleDownAnimation;
+        break;
     }
   }
 

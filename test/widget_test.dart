@@ -14,7 +14,8 @@ void main() {
   testWidgets('Flame game initializes', (WidgetTester tester) async {
     // Build our game and trigger a frame.
     await tester.pumpWidget(
-      GameWidget(game: FishyFishGame()),
+      GameWidget(
+        game: FishyFishGame(),),
     );
 
     // Verify the GameWidget renders without errors

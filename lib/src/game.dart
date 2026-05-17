@@ -7,7 +7,7 @@ import 'player/player.dart';
 import 'onScreen/joystick.dart';
 import 'background/background_component.dart';
 import 'npc/george.dart';
-import 'ui/interact_button.dart';
+import 'onScreen/interact_button.dart';
 import 'ui/dialogue_box.dart';
 import 'onScreen/inventory_button.dart';
 
@@ -21,7 +21,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   late DialogueBox dialogueBox;
   late Image _georgeImage;
   String currentMap = 'map1';
-  bool showDebugCoordinates = false;
+  bool showDebugCoordinates = false; // Set to true when placing zones
+  final List<_InteractionTarget> _interactionTargets = [];
 
   // Inventory system
   List<String> inventory = ["test item", "mavinesh"];
@@ -53,6 +54,15 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _georgeImage = await images.load('george.png');
     george = GeorgeNPC(_georgeImage);
     await world.add(george);
+    _interactionTargets.add(
+      _InteractionTarget(
+        position: () => george.position,
+        range: 50,
+        onInteract: () {
+          dialogueBox.show('George', 'Do you know? Hafiz is gay');
+        },
+      ),
+    );
 
     // Joystick - add to camera viewport (stays on screen)
     joystick = createJoystick();
@@ -60,32 +70,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     // Interact button - right side of screen
     interactButton = InteractButton(
-      onTap: () {
-        if (dialogueBox.isVisible) {
-          dialogueBox.dismiss();
-        } else {
-          final dist = (player.position - george.position).length;
-          if (dist < 50) {
-            final diff = george.position - player.position;
-            final angle = math.atan2(diff.y, diff.x);
-            final degrees = (angle * 180 / math.pi + 360) % 360;
-            if (degrees >= 315 || degrees < 45) {
-              player.animation = player.rightAnimation;
-              player.direction = 2;
-            } else if (degrees >= 45 && degrees < 135) {
-              player.animation = player.downAnimation;
-              player.direction = 3;
-            } else if (degrees >= 135 && degrees < 225) {
-              player.animation = player.leftAnimation;
-              player.direction = 1;
-            } else {
-              player.animation = player.upAnimation;
-              player.direction = 4;
-            }
-            dialogueBox.show('George', 'Do you know? Hafiz is gay');
-          }
-        }
-      },
+      onTap: _handleInteract,
     );
     interactButton.position = Vector2(size.x - 90, size.y - 135);
     camera.viewport.add(interactButton);
@@ -110,10 +95,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     // Initialize transition zones
     map1ToMap2Zone = PolygonComponent([
-      Vector2(225, 283),
-      Vector2(260, 283),
-      Vector2(240, 290),
-      Vector2(253, 290),
+      Vector2(225, 300),
+      Vector2(260, 300),
+      Vector2(240, 320),
+      Vector2(253, 320),
     ]);
 
     // House door zone (map1) - door opening at tiles 14-16, rows 19-20
@@ -182,4 +167,61 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     super.update(dt);
   }
+
+  void _handleInteract() {
+    if (dialogueBox.isVisible) {
+      dialogueBox.dismiss();
+      return;
+    }
+
+    _InteractionTarget? target;
+    var closestDistance = double.infinity;
+
+    for (final candidate in _interactionTargets) {
+      final distance = (player.position - candidate.position()).length;
+      if (distance <= candidate.range && distance < closestDistance) {
+        closestDistance = distance;
+        target = candidate;
+      }
+    }
+
+    if (target == null) {
+      return;
+    }
+
+    _facePlayerTowards(target.position());
+    target.onInteract();
+  }
+
+  void _facePlayerTowards(Vector2 targetPosition) {
+    final diff = targetPosition - player.position;
+    final angle = math.atan2(diff.y, diff.x);
+    final degrees = (angle * 180 / math.pi + 360) % 360;
+
+    if (degrees >= 315 || degrees < 45) {
+      player.animation = player.rightAnimation;
+      player.direction = 2;
+    } else if (degrees >= 45 && degrees < 135) {
+      player.animation = player.downAnimation;
+      player.direction = 3;
+    } else if (degrees >= 135 && degrees < 225) {
+      player.animation = player.leftAnimation;
+      player.direction = 1;
+    } else {
+      player.animation = player.upAnimation;
+      player.direction = 4;
+    }
+  }
+}
+
+class _InteractionTarget {
+  _InteractionTarget({
+    required this.position,
+    required this.range,
+    required this.onInteract,
+  });
+
+  final Vector2 Function() position;
+  final double range;
+  final void Function() onInteract;
 }
