@@ -1,8 +1,10 @@
+import 'dart:async' as async;
 import 'dart:math' as math;
-import 'dart:ui' show Image;
+import 'dart:ui' show Image, FontWeight, Color, Offset, Shadow;
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/collisions.dart';
+import 'package:flame/text.dart';
 
 import 'player/player.dart';
 import 'onScreen/joystick.dart';
@@ -15,6 +17,7 @@ import 'dart:ui' as ui show instantiateImageCodec;
 import 'onScreen/interact_button.dart';
 import 'ui/dialogue_box.dart';
 import 'onScreen/inventory_button.dart';
+import 'utils/save_manager.dart';
 
 class FishyFishGame extends FlameGame with HasCollisionDetection {
   late Player player;
@@ -32,6 +35,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   String currentMap = 'map1';
   bool showDebugCoordinates = false; // Set to true when placing zones
   bool _hudReady = false;
+  async.Timer? _autoSaveTimer;
+  late TextComponent _saveIndicator;
+  bool _isSaving = false;
   final List<_InteractionTarget> _interactionTargets = [];
 
   // Inventory system
@@ -101,6 +107,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     // Scatter remaining trash assets across the map
     await _scatterTrash();
 
+    // Load saved game data and restore player state
+    await _loadGameData();
+
     // Joystick - add to camera viewport (stays on screen)
     joystick = createJoystick();
     camera.viewport.add(joystick);
@@ -126,6 +135,27 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     dialogueBox.size = Vector2(size.x - 40, 130);
     dialogueBox.position = Vector2(size.x / 2, size.y - 20);
     camera.viewport.add(dialogueBox);
+
+    // Save indicator - top right of screen
+    _saveIndicator = TextComponent(
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          color: Color(0xFFFFFFFF),
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          shadows: [
+            Shadow(color: Color(0x80000000), blurRadius: 4, offset: Offset(2, 2)),
+          ],
+        ),
+      ),
+      text: '',
+      anchor: Anchor.topRight,
+      position: Vector2(size.x - 16, 16),
+    );
+    _saveIndicator.priority = 100;
+    camera.viewport.add(_saveIndicator);
+
+    _startAutoSave();
 
     // Camera setup
     camera.viewfinder.anchor = Anchor.center;
@@ -299,6 +329,52 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     // }
 
     super.update(dt);
+  }
+
+  void _startAutoSave() {
+    _autoSaveTimer = async.Timer.periodic(const Duration(seconds: 20), (_) async {
+      await _performSave();
+    });
+  }
+
+  Future<void> _performSave() async {
+    if (_isSaving) return;
+    _isSaving = true;
+
+    _saveIndicator.text = 'Saving...';
+
+    final data = GameData(
+      playerX: player.position.x,
+      playerY: player.position.y,
+      currentMap: currentMap,
+      inventory: List.from(inventory),
+    );
+
+    await SaveManager.save(data);
+
+    _saveIndicator.text = 'Saved!';
+    await Future.delayed(const Duration(seconds: 2));
+    _saveIndicator.text = '';
+    _isSaving = false;
+  }
+
+  Future<void> _loadGameData() async {
+    final data = await SaveManager.load();
+    if (data == null) return;
+
+    inventory = List.from(data.inventory);
+
+    if (data.currentMap != currentMap) {
+      changeMap(data.currentMap, newPosition: Vector2(data.playerX, data.playerY));
+    } else {
+      player.position = Vector2(data.playerX, data.playerY);
+    }
+  }
+
+  @override
+  void onRemove() {
+    _autoSaveTimer?.cancel();
+    super.onRemove();
   }
 
   void _updateInteractButtonText() {
