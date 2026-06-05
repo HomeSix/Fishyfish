@@ -11,6 +11,7 @@ import 'onScreen/joystick.dart';
 import 'background/background_component.dart';
 import 'npc/george.dart';
 import 'items/banana_peel.dart';
+import 'items/bin.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui show instantiateImageCodec;
@@ -106,6 +107,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     // Scatter remaining trash assets across the map
     await _scatterTrash();
+
+    // Place a bin 5 tiles (320px) right of the player start position
+    await _placeBinNearPlayer();
 
     // Load saved game data and restore player state
     await _loadGameData();
@@ -252,6 +256,42 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         // ignore missing assets or decode errors
       }
     }
+  }
+
+  Future<void> _placeBinNearPlayer() async {
+    final tileDistance = 5 * 64.0;
+    final binSize = Vector2(48, 64);
+    final playerStart = Vector2(271, 640);
+
+    final candidates = [
+      playerStart + Vector2(tileDistance, 0),
+      playerStart + Vector2(-tileDistance, 0),
+      playerStart + Vector2(0, tileDistance),
+      playerStart + Vector2(0, -tileDistance),
+    ];
+
+    Vector2? chosen;
+    for (final pos in candidates) {
+      if (!_wouldCollideWithMap(pos, binSize)) {
+        chosen = pos;
+        break;
+      }
+    }
+
+    chosen ??= candidates.first;
+
+    final bin = Bin(position: chosen);
+    await world.add(bin);
+
+    final binTarget = _InteractionTarget(
+      position: () => bin.position,
+      range: 60,
+      label: 'sort',
+      onInteract: () {
+        // TODO: implement trash sorting logic
+      },
+    );
+    _interactionTargets.add(binTarget);
   }
 
   @override

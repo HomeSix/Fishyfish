@@ -69,6 +69,7 @@ flutter:
     - assets/tiles/map1/
     - assets/tiles/map2/
     - assets/tiles/house/
+    - assets/tiles/trashcan/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
