@@ -1,12 +1,150 @@
 {
-    "activeFile": "",
+    "activeFile": "assets/tilesheet/Terrains 2.tsx",
     "expandedProjectPaths": [
+        "assets",
+        "assets/tiles/map1",
+        "assets/tiles/map2",
+        ".",
+        "assets/tiles/house"
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/WaterAndFire.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/adobe6.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/beach-desert.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/beach-desert2.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/fence_remix.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/house/map.tmx": {
+            "scale": 2.7540865384615385,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 136.3428471676704,
+                "y": 104.02723225975387
+            }
+        },
+        "assets/tiles/house/map.tmx#spritefusion": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/map1/map.tmx": {
+            "scale": 0.34585937499999997,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1282.3130788344251,
+                "y": 284.79783148859275
+            }
+        },
+        "assets/tiles/map1/map.tmx#spritefusion": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/map2/map.tmx": {
+            "scale": 3.2548295454545455,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 95.85755433359517,
+                "y": 43.47385877629396
+            }
+        },
+        "assets/tiles/map2/map.tmx#spritefusion": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/museum.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -4347,
+                "y": 2223
+            }
+        },
+        "assets/tiles/rocks-snow.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/rocks.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/spritesheet.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/terrain-map-v7.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tiles/terrain-v7.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tilesheet/Beach Desert 2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/Beach Desert.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tilesheet/Terrains 2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/Terrains.tsx": {
+            "scaleInDock": 1
+        },
+        "assets/tilesheet/adobe6.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/fence_remix.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/rocks-snow-overlay.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/rocks-snow.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/rocks.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/water-fire.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
     },
+    "last.externalTilesetPath": "/home/azik/repos/UTHM/SEM2/SpecialTopic/Fishyfish/assets/tilesheet/anas",
+    "last.imagePath": "/home/azik/repos/UTHM/SEM2/SpecialTopic/Fishyfish/assets/spreadsheet/anas",
     "openFiles": [
+        "assets/tiles/map2/map.tmx",
+        "assets/tilesheet/Beach Desert 2.tsx",
+        "assets/tiles/map1/map.tmx",
+        "assets/tiles/house/map.tmx",
+        "assets/tilesheet/Terrains 2.tsx"
     ],
     "project": "FishyFish.tiled-project",
     "recentFiles": [
-    ]
+        "assets/tilesheet/adobe6.tsx",
+        "assets/tilesheet/fence_remix.tsx",
+        "assets/tilesheet/rocks.tsx",
+        "assets/tilesheet/rocks-snow.tsx",
+        "assets/tilesheet/rocks-snow-overlay.tsx",
+        "assets/tilesheet/water-fire.tsx",
+        "assets/tiles/map2/map.tmx",
+        "assets/tilesheet/Beach Desert 2.tsx",
+        "assets/tiles/map1/map.tmx",
+        "assets/tiles/house/map.tmx",
+        "assets/tilesheet/Terrains 2.tsx",
+        "assets/tiles/museum.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
 }
