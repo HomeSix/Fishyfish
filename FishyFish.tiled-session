@@ -53,8 +53,8 @@
             "scale": 3.2548295454545455,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 95.85755433359517,
-                "y": 43.47385877629396
+                "x": 95.70393645806058,
+                "y": 43.473858776293966
             }
         },
         "assets/tiles/map2/map.tmx#spritefusion": {
@@ -62,10 +62,10 @@
         },
         "assets/tiles/museum.tmx": {
             "scale": 0.5,
-            "selectedLayer": 0,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": -4347,
-                "y": 2223
+                "x": -4587,
+                "y": 2369
             }
         },
         "assets/tiles/rocks-snow.tsx": {
