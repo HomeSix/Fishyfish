@@ -22,7 +22,6 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   int _lastDirection = 3;
   Player(this.image) : super(anchor: Anchor.center);
   Vector2 _previousPosition = Vector2.zero();
-  late Vector2 _gameSize;
   bool _collidingX = false;
   bool _collidingY = false;
   Vector2 _intendedMovement = Vector2.zero();
@@ -54,7 +53,6 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
 
   void updateMovement(JoystickComponent joystick, double dt, Vector2 gameSize) {
     _previousPosition.setFrom(position);
-    _gameSize = gameSize;
     _collidingX = false;
     _collidingY = false;
     _intendedMovement.setZero();

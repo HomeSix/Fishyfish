@@ -10,11 +10,29 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
 
   BackgroundComponent({this.mapName = 'map1'});
 
+  double get _tileSize {
+    switch (mapName) {
+      case 'map1':
+        return 64.0;
+      case 'map2':
+      case 'house':
+        return 16.0;
+      case 'beach':
+      case 'museum':
+      default:
+        return 32.0;
+    }
+  }
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    map = await TiledComponent.load('$mapName/map.tmx', Vector2.all(64));
+    try {
+      map = await TiledComponent.load('$mapName/map.tmx', Vector2.all(_tileSize));
+    } catch (_) {
+      map = await TiledComponent.load('$mapName.tmx', Vector2.all(_tileSize));
+    }
     await add(map);
 
     _setupCollision();
@@ -34,8 +52,8 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
       final tileData = layer.tileData;
       if (tileData == null) continue;
 
-      final tileWidth = map.tileMap.map.tileWidth?.toDouble() ?? 64.0;
-      final tileHeight = map.tileMap.map.tileHeight?.toDouble() ?? 64.0;
+      final tileWidth = map.tileMap.map.tileWidth.toDouble();
+      final tileHeight = map.tileMap.map.tileHeight.toDouble();
 
      for (var y = 0; y < tileData.length; y++) {
         for (var x = 0; x < tileData[y].length; x++) {

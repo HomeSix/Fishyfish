@@ -65,7 +65,9 @@ flutter:
     - assets/images/
     - assets/trash/
     - assets/tiles/
+    - assets/tilesheet/anas/
     - assets/spreadsheet/
+    - assets/spreadsheet/anas/
     - assets/tilesheet/
   #   - images/a_dot_ham.jpeg
 

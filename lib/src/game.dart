@@ -33,7 +33,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   BananaPeel? banana;
   SpriteComponent? heldItem;
   final Map<PositionComponent, _InteractionTarget> _itemTargets = {};
-  String currentMap = 'map1';
+  String currentMap = 'beach';
   bool showDebugCoordinates = false; // Set to true when placing zones
   bool _hudReady = false;
   async.Timer? _autoSaveTimer;
