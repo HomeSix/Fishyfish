@@ -1,11 +1,17 @@
 {
-    "activeFile": "assets/tilesheet/Terrains 2.tsx",
+    "activeFile": "assets/tiles/beach.tmx",
     "expandedProjectPaths": [
-        "assets",
-        "assets/tiles/map1",
-        "assets/tiles/map2",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset",
+        "assets/tilesheet",
+        "assets/tiles",
+        "ios/Runner/Assets.xcassets",
         ".",
-        "assets/tiles/house"
+        "assets/tiles/house",
+        "assets/tiles/map2",
+        "assets",
+        "assets/tilesheet/anas",
+        "ios/Runner/Assets.xcassets/LaunchImage.imageset",
+        "assets/tiles/map1"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -24,6 +30,14 @@
         "assets/tiles/beach-desert2.tsx": {
             "scaleInDock": 1
         },
+        "assets/tiles/beach.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 830.3333333333333,
+                "y": 452.66666666666663
+            }
+        },
         "assets/tiles/fence_remix.tsx": {
             "scaleInDock": 1
         },
@@ -31,7 +45,7 @@
             "scale": 2.7540865384615385,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 136.3428471676704,
+                "x": 305.54595443833466,
                 "y": 104.02723225975387
             }
         },
@@ -42,7 +56,7 @@
             "scale": 0.34585937499999997,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1282.3130788344251,
+                "x": 2629.681499887057,
                 "y": 284.79783148859275
             }
         },
@@ -53,7 +67,7 @@
             "scale": 3.2548295454545455,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 95.70393645806058,
+                "x": 96.0111722091298,
                 "y": 43.473858776293966
             }
         },
@@ -61,11 +75,11 @@
             "scaleInDock": 1
         },
         "assets/tiles/museum.tmx": {
-            "scale": 0.5,
+            "scale": 0.33,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": -4587,
-                "y": 2369
+                "x": -5380.30303030303,
+                "y": 2778.787878787879
             }
         },
         "assets/tiles/rocks-snow.tsx": {
@@ -88,20 +102,50 @@
             "scaleInEditor": 1
         },
         "assets/tilesheet/Beach Desert.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tilesheet/Terrains 2.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "assets/tilesheet/Terrains 2.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
         "assets/tilesheet/Terrains.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "assets/tilesheet/adobe6.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "assets/tilesheet/anas/adobe6.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/anas/fence_remix.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/anas/rocks-snow.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/anas/rocks.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/anas/water-fire.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/basic.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
         "assets/tilesheet/fence_remix.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/recycle Bins.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -123,28 +167,41 @@
         }
     },
     "last.externalTilesetPath": "/home/azik/repos/UTHM/SEM2/SpecialTopic/Fishyfish/assets/tilesheet/anas",
-    "last.imagePath": "/home/azik/repos/UTHM/SEM2/SpecialTopic/Fishyfish/assets/spreadsheet/anas",
+    "last.imagePath": "/home/azik/repos/UTHM/SEM2/SpecialTopic/Fishyfish/assets/spreadsheet",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
     "openFiles": [
         "assets/tiles/map2/map.tmx",
         "assets/tilesheet/Beach Desert 2.tsx",
-        "assets/tiles/map1/map.tmx",
-        "assets/tiles/house/map.tmx",
-        "assets/tilesheet/Terrains 2.tsx"
+        "assets/tilesheet/Terrains 2.tsx",
+        "assets/tilesheet/anas/rocks.tsx",
+        "assets/tilesheet/anas/water-fire.tsx",
+        "assets/tiles/beach.tmx",
+        "assets/tilesheet/Beach Desert.tsx",
+        "assets/tilesheet/Terrains.tsx",
+        "assets/tilesheet/basic.tsx",
+        "assets/tilesheet/anas/fence_remix.tsx",
+        "assets/tiles/museum.tmx"
     ],
     "project": "FishyFish.tiled-project",
     "recentFiles": [
-        "assets/tilesheet/adobe6.tsx",
-        "assets/tilesheet/fence_remix.tsx",
-        "assets/tilesheet/rocks.tsx",
-        "assets/tilesheet/rocks-snow.tsx",
-        "assets/tilesheet/rocks-snow-overlay.tsx",
-        "assets/tilesheet/water-fire.tsx",
+        "assets/tiles/beach.tmx",
+        "assets/tilesheet/recycle Bins.tsx",
         "assets/tiles/map2/map.tmx",
         "assets/tilesheet/Beach Desert 2.tsx",
-        "assets/tiles/map1/map.tmx",
-        "assets/tiles/house/map.tmx",
         "assets/tilesheet/Terrains 2.tsx",
-        "assets/tiles/museum.tmx"
+        "assets/tilesheet/anas/rocks.tsx",
+        "assets/tilesheet/anas/water-fire.tsx",
+        "assets/tiles/museum.tmx",
+        "assets/tilesheet/anas/fence_remix.tsx",
+        "assets/tilesheet/basic.tsx",
+        "assets/tilesheet/Terrains.tsx",
+        "assets/tilesheet/Beach Desert.tsx"
     ],
-    "tileset.lastUsedFormat": "tsx"
+    "resizeMap.removeObjects": false,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    }
 }
