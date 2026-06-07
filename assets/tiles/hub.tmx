@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="39" height="26" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="266">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="39" height="26" tilewidth="32" tileheight="32" infinite="0" nextlayerid="18" nextobjectid="269">
  <tileset firstgid="1" source="../tilesheet/Terrains 2.tsx"/>
  <tileset firstgid="2049" source="../tilesheet/hafiz/spritesheet.tsx"/>
  <tileset firstgid="2497" source="../tilesheet/hafiz/house.tsx"/>
@@ -305,7 +305,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="15" name="signboard" width="39" height="26">
+ <layer id="17" name="signboard" width="39" height="26">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

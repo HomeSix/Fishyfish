@@ -1,18 +1,20 @@
 {
     "activeFile": "assets/tiles/musuem.tmx",
     "expandedProjectPaths": [
-        "assets/tiles/map2",
-        "assets/tiles",
         "assets/tilesheet",
-        "assets/tilesheet/anas",
-        "ios/Runner/Assets.xcassets",
-        "ios/Runner/Assets.xcassets/LaunchImage.imageset",
+        "android/app",
         "assets",
         "assets/tilesheet/hafiz",
-        "ios/Runner/Assets.xcassets/AppIcon.appiconset",
         "assets/tiles/map1",
+        "android/app/src/debug",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset",
+        ".",
         "assets/tiles/house",
-        "."
+        "ios/Runner/Assets.xcassets",
+        "ios/Runner/Assets.xcassets/LaunchImage.imageset",
+        "assets/tiles/map2",
+        "assets/tiles",
+        "android/app/src"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -105,8 +107,8 @@
             "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1184,
-                "y": 592
+                "x": 1122.0090536753612,
+                "y": 602.5005389092478
             }
         },
         "assets/tiles/fence_remix.tsx": {
@@ -124,19 +126,15 @@
             "scaleInDock": 1
         },
         "assets/tiles/hub.tmx": {
-            "scale": 0.0625,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                12,
+                13
+            ],
+            "scale": 1.6672,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 3208,
-                "y": 1760
-            }
-        },
-        "assets/tiles/map1.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 870,
-                "y": -1829
+                "x": 549.1242802303263,
+                "y": 453.154990403071
             }
         },
         "assets/tiles/map1/map.tmx": {
@@ -170,11 +168,11 @@
             }
         },
         "assets/tiles/musuem.tmx": {
-            "scale": 0.337890625,
+            "scale": 0.29648437499999997,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1376.184971098266,
-                "y": 1216.3699421965316
+                "x": 374.3873517786562,
+                "y": 1215.9156785243742
             }
         },
         "assets/tiles/rocks-snow.tsx": {
@@ -295,6 +293,10 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "assets/tilesheet/hafiz/signboard.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "assets/tilesheet/hafiz/spritesheet.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1
@@ -338,26 +340,28 @@
     "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
-        "assets/tiles/starter-map.tmx",
-        "assets/tiles/musuem.tmx",
-        "assets/tiles/map1.tmx",
-        "assets/tiles/beach.tmx",
-        "assets/tilesheet/collection.tsx"
+        "assets/tilesheet/Terrains 2.tsx",
+        "assets/tilesheet/hafiz/spritesheet.tsx",
+        "assets/tilesheet/hafiz/house.tsx",
+        "assets/tilesheet/hafiz/fence-test.tsx",
+        "assets/tilesheet/hafiz/signboard.tsx",
+        "assets/tiles/hub.tmx",
+        "assets/tiles/musuem.tmx"
     ],
     "project": "FishyFish.tiled-project",
     "recentFiles": [
-        "assets/tiles/starter-map.tmx",
-        "assets/tilesheet/collection.tsx",
-        "assets/tiles/beach.tmx",
-        "assets/tiles/map1.tmx",
         "assets/tiles/musuem.tmx",
-        "//wsl.localhost/Ubuntu/home/azik/repos/Project/map1.tmx",
-        "assets/tilesheet/hafiz/tree-1.tsx",
-        "assets/tilesheet/hafiz/basic3.tsx",
-        "assets/tilesheet/hafiz/basic2.tsx",
-        "assets/tilesheet/hafiz/house1.tsx",
-        "assets/tilesheet/hafiz/house2.tsx",
-        "assets/tilesheet/bin 64 but 32.tsx"
+        "assets/tilesheet/Terrains 2.tsx",
+        "assets/tilesheet/hafiz/spritesheet.tsx",
+        "assets/tilesheet/hafiz/house.tsx",
+        "assets/tilesheet/hafiz/fence-test.tsx",
+        "assets/tilesheet/hafiz/signboard.tsx",
+        "assets/tiles/hub.tmx",
+        "assets/tiles/beach.tmx",
+        "assets/tilesheet/hafiz/signboard-1-sheet.tsx",
+        "assets/tilesheet/hafiz/signboard-1.tsx",
+        "assets/tiles/starter-map.tmx",
+        "assets/tilesheet/hafiz/tree.tsx"
     ],
     "resizeMap.removeObjects": false,
     "tileset.lastUsedFormat": "tsx",

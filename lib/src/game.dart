@@ -32,9 +32,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   final Map<PositionComponent, _InteractionTarget> _itemTargets = {};
   final Map<PositionComponent, String> _trashFilenames = {};
   String? _heldTrashFile;
-  String currentMap = 'beach';
+  String currentMap = 'hub';
   bool showDebugCoordinates = false;
   bool _hudReady = false;
+  bool _isChangingMap = false;
   async.Timer? _autoSaveTimer;
   late TextComponent _saveIndicator, _scoreText, _timerText, _highScoreText;
   bool _isSaving = false;
@@ -99,28 +100,30 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     highScore = await SaveManager.loadHighScore();
 
-    // Banana peel item - load and place on the map
-    final data = await rootBundle.load('assets/trash/bananaPeel.png');
-    final bytes = data.buffer.asUint8List();
-    final codec = await ui.instantiateImageCodec(bytes);
-    final frame = await codec.getNextFrame();
-    _bananaImage = frame.image;
-    banana = BananaPeel(
-      sprite: Sprite(_bananaImage),
-      size: Vector2(29, 29),
-      position: Vector2(300, 680),
-    );
-    await world.add(banana!);
-    final bananaTarget = _InteractionTarget(
-      position: () => banana!.position,
-      range: 50,
-      label: 'pick up',
-      onInteract: () {
-        _pickupItem(banana!);
-      },
-    );
-    _interactionTargets.add(bananaTarget);
-    _itemTargets[banana!] = bananaTarget;
+    // Banana peel item - only on beach map
+    if (currentMap == 'beach') {
+      final data = await rootBundle.load('assets/trash/bananaPeel.png');
+      final bytes = data.buffer.asUint8List();
+      final codec = await ui.instantiateImageCodec(bytes);
+      final frame = await codec.getNextFrame();
+      _bananaImage = frame.image;
+      banana = BananaPeel(
+        sprite: Sprite(_bananaImage),
+        size: Vector2(29, 29),
+        position: Vector2(300, 680),
+      );
+      await world.add(banana!);
+      final bananaTarget = _InteractionTarget(
+        position: () => banana!.position,
+        range: 50,
+        label: 'pick up',
+        onInteract: () {
+          _pickupItem(banana!);
+        },
+      );
+      _interactionTargets.add(bananaTarget);
+      _itemTargets[banana!] = bananaTarget;
+    }
 
     // Scatter remaining trash assets across the map
     await _scatterTrash();
@@ -351,15 +354,38 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     );
   }
 
-  Future<void> changeMap(String newMap) async {
+  Future<void> changeMap(String newMap, [String? spawnType]) async {
+    _isChangingMap = true;
+    _heldTrashFile = null;
+    if (heldItem != null) {
+      heldItem!.removeFromParent();
+      heldItem = null;
+    }
+    banana?.removeFromParent();
+    banana = null;
+    _interactionTargets.clear();
+    _itemTargets.clear();
+    _trashFilenames.clear();
     background.removeFromParent();
+
+    _minigameState = 'idle';
+    score = 0;
+    _timeRemaining = 60;
+    _scoreText.text = '';
+    _timerText.text = '';
 
     currentMap = newMap;
     background = BackgroundComponent(mapName: newMap);
     background.priority = -1;
     await world.add(background);
 
-    _setPlayerToSpawn();
+    _setPlayerToSpawn(spawnType);
+    _setupBins();
+    if (newMap == 'beach') {
+      await _scatterTrash();
+    }
+
+    _isChangingMap = false;
   }
 
   @override
@@ -380,6 +406,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     // --- Minigame zone detection ---
     _checkMinigameZone();
 
+    // --- Map transitions ---
+    if (!_isChangingMap) _checkMapTransitions();
+
     // --- Minigame timer countdown ---
     if (_minigameState == 'active') {
       _timeRemaining -= dt;
@@ -393,6 +422,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _updateInteractButtonText();
 
     super.update(dt);
+
+    if (_isChangingMap) return;
 
     final map = background.map.tileMap.map;
     final double mapW = (map.width * map.tileWidth).toDouble();
@@ -409,6 +440,12 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   }
 
   void _checkMinigameZone() {
+    // After game over dialogue dismissed, reset to idle
+    if (_minigameState == 'finished' && !dialogueBox.isVisible) {
+      _minigameState = 'idle';
+      return;
+    }
+
     // If waiting for dialogue dismissal, advance pages or start minigame
     if (_minigameState == 'pending' && !dialogueBox.isVisible) {
       _npcDialogueIndex++;
@@ -437,6 +474,29 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       _minigameState = 'pending';
       _npcDialogueIndex = 0;
       dialogueBox.show(_npcName, _npcDialoguePages[0]);
+    }
+  }
+
+  void _checkMapTransitions() {
+    if (dialogueBox.isVisible) return;
+
+    final feetSize = Vector2(30, 20);
+    final dy = (player.size.y / 2 - feetSize.y / 2) - 16;
+    final feetRect = Rect.fromCenter(
+      center: Offset(player.position.x, player.position.y + dy),
+      width: feetSize.x,
+      height: feetSize.y,
+    );
+
+    final toBeach = background.toBeachZone;
+    if (toBeach != null && feetRect.overlaps(toBeach) && currentMap == 'hub') {
+      changeMap('beach');
+      return;
+    }
+
+    final toHub = background.toHubZone;
+    if (toHub != null && feetRect.overlaps(toHub) && currentMap == 'beach') {
+      changeMap('hub', 'from_beach');
     }
   }
 
@@ -725,8 +785,16 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     }
   }
 
-  void _setPlayerToSpawn() {
-    final poly = background.playerSpawnPoly;
+  void _setPlayerToSpawn([String? spawnType]) {
+    List<Vector2>? poly;
+    if (spawnType == 'from_beach') {
+      poly = background.fromBeachSpawnPoly;
+    } else if (spawnType == 'from_hub') {
+      poly = background.fromHubSpawnPoly;
+    } else {
+      poly = background.playerSpawnPoly;
+    }
+
     if (poly != null && poly.isNotEmpty) {
       double sx = 0, sy = 0;
       for (final p in poly) { sx += p.x; sy += p.y; }
