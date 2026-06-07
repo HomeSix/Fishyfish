@@ -45,6 +45,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   int highScore = 0;
   double _timeRemaining = 120;
   String _minigameState = 'idle'; // idle | pending | active | finished
+  List<String>? _activeDialoguePages;
+  int _activeDialogueIndex = 0;
 
   static const _npcName = 'Ranger Jack';
   static const _npcDialoguePages = [
@@ -63,6 +65,16 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         "ke tak? Jom bersihkan pantai!",
   ];
   int _npcDialogueIndex = 0;
+
+  static const _welcomeBoardName = 'Welcome Board';
+  static const _welcomeBoardDialoguePages = [
+    'Welcome to Fishyfish!',
+    'Dahulu, lautan dikenali sebagai “Laut Biru Abadi” — tempat yang penuh dengan kehidupan, warna, dan keseimbangan antara manusia dan alam. Ikan-ikan berenang bebas, terumbu karang berkembang, dan hidupan laut hidup harmoni.',
+    'Namun, lama-kelamaan, manusia mula mencemarkan laut dengan pelbagai bahan buangan — plastik, sisa toksik, dan sampah sarap. Laut yang dulunya jernih kini semakin keruh. Banyak hidupan laut jatuh sakit, habitat musnah, dan ada yang hampir pupus.',
+    'Pemain mengambil peranan sebagai seorang penyelam muda yang berani, dihantar untuk meneroka dan memulihkan lautan. Setiap kali menyelam, pemain akan menemui pelbagai “sea stuff” yang yang masih hidup dan perlukan bantuan, ada juga yang telah rosak akibat pencemaran.',
+    'Sepanjang perjalanan, pemain akan:\n\n- Membersihkan ikan dan membantu hidupan laut yang terjejas\n- Mengutip dan mengurus bahan buangan dengan betul\n- Belajar tentang jenis sampah dan kesannya terhadap alam\n- Meneroka kawasan laut berbeza yang semakin terjejas',
+    'Namun, semakin dalam pemain menyelam, semakin jelas bahawa kerosakan ini bukan sesuatu yang kecil. Laut sedang “sakit”, dan hanya dengan usaha berterusan, keseimbangan itu boleh dikembalikan.\n\nMatlamat utama pemain bukan sekadar untuk bermain, tetapi untuk memulihkan Laut Biru Abadi dan mengembalikan harapan kepada semua hidupan laut.',
+  ];
 
   List<String> inventory = ["test item", "mavinesh"];
   void addItemToInventory(String item) {
@@ -155,8 +167,13 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _updateHudLayout();
 
     // Dialogue box - bottom of screen
-    dialogueBox = DialogueBox();
-    dialogueBox.size = Vector2(size.x - 40, 130);
+    dialogueBox = DialogueBox(onDismissCallback: () {
+      if (_activeDialoguePages != null) {
+        _clearActiveDialogue();
+        overlays.add('WelcomePopup');
+      }
+    });
+    dialogueBox.size = Vector2(size.x - 40, 180);
     dialogueBox.position = Vector2(size.x / 2, size.y - 20);
     camera.viewport.add(dialogueBox);
 
@@ -523,19 +540,27 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   void _updateInteractButtonText() {
     _InteractionTarget? closestTalk;
+    _InteractionTarget? closestRead;
     _InteractionTarget? closestBin;
     _InteractionTarget? closestOther;
     var closestTalkDist = double.infinity;
+    var closestReadDist = double.infinity;
     var closestBinDist = double.infinity;
     var closestOtherDist = double.infinity;
 
     for (final candidate in _interactionTargets) {
       final distance = (player.position - candidate.position()).length;
       if (distance <= candidate.range) {
-        if (candidate.label.toLowerCase() == 'talk') {
+        final label = candidate.label.toLowerCase();
+        if (label == 'talk') {
           if (distance < closestTalkDist) {
             closestTalkDist = distance;
             closestTalk = candidate;
+          }
+        } else if (label == 'read') {
+          if (distance < closestReadDist) {
+            closestReadDist = distance;
+            closestRead = candidate;
           }
         } else if (candidate.label.contains('bin')) {
           if (distance < closestBinDist) {
@@ -553,6 +578,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     if (closestTalk != null) {
       interactButton.actionText = closestTalk.label;
+    } else if (closestRead != null) {
+      interactButton.actionText = closestRead.label;
     } else if (heldItem != null && closestBin != null) {
       interactButton.actionText = 'sort';
     } else if (heldItem != null) {
@@ -566,23 +593,41 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   void _handleInteract() {
     if (dialogueBox.isVisible) {
+      if (_activeDialoguePages != null && _activeDialogueIndex < _activeDialoguePages!.length - 1) {
+        _activeDialogueIndex++;
+        dialogueBox.show(_welcomeBoardName, _activeDialoguePages![_activeDialogueIndex]);
+        return;
+      }
+      final wasActive = _activeDialoguePages != null;
+      _clearActiveDialogue();
       dialogueBox.dismiss();
+      if (wasActive) {
+        overlays.add('WelcomePopup');
+      }
       return;
     }
     _InteractionTarget? closestTalk;
+    _InteractionTarget? closestRead;
     _InteractionTarget? closestBin;
     _InteractionTarget? closestOther;
     var closestTalkDist = double.infinity;
+    var closestReadDist = double.infinity;
     var closestBinDist = double.infinity;
     var closestOtherDist = double.infinity;
 
     for (final candidate in _interactionTargets) {
       final distance = (player.position - candidate.position()).length;
       if (distance <= candidate.range) {
-        if (candidate.label.toLowerCase() == 'talk') {
+        final label = candidate.label.toLowerCase();
+        if (label == 'talk') {
           if (distance < closestTalkDist) {
             closestTalkDist = distance;
             closestTalk = candidate;
+          }
+        } else if (label == 'read') {
+          if (distance < closestReadDist) {
+            closestReadDist = distance;
+            closestRead = candidate;
           }
         } else if (candidate.label.contains('bin')) {
           if (distance < closestBinDist) {
@@ -598,10 +643,16 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       }
     }
 
-    // Priority: talk > sort (if near bin + holding) > drop (if holding) > other interactions (e.g., pick up)
+    // Priority: talk/read > sort (if near bin + holding) > drop (if holding) > other interactions (e.g., pick up)
     if (closestTalk != null) {
       _facePlayerTowards(closestTalk.position());
       closestTalk.onInteract();
+      return;
+    }
+
+    if (closestRead != null) {
+      _facePlayerTowards(closestRead.position());
+      closestRead.onInteract();
       return;
     }
 
@@ -760,6 +811,15 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         range: range,
         label: binName,
         onInteract: () => _sortTrashIntoBin(binName),
+      ));
+    }
+
+    for (final boardData in background.welcomeBoards) {
+      _interactionTargets.add(_InteractionTarget(
+        position: () => Vector2(boardData.x, boardData.y),
+        range: math.max(boardData.width, boardData.height) * 1.5,
+        label: 'read',
+        onInteract: _showWelcomeBoardDialogue,
       ));
     }
   }
@@ -985,6 +1045,17 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _scoreText.text = '';
     _timerText.text = '';
     dialogueBox.show('Game Over', 'Your score: $score\nHigh score: $highScore');
+  }
+
+  void _showWelcomeBoardDialogue() {
+    _activeDialoguePages = _welcomeBoardDialoguePages;
+    _activeDialogueIndex = 0;
+    dialogueBox.show(_welcomeBoardName, _activeDialoguePages!.first);
+  }
+
+  void _clearActiveDialogue() {
+    _activeDialoguePages = null;
+    _activeDialogueIndex = 0;
   }
 }
 

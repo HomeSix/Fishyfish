@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../game.dart';
 import '../onScreen/inventory_overlay.dart';
+import '../onScreen/welcome_popup.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -27,6 +28,7 @@ class _GamePageState extends State<GamePage> {
         game: _game,
         overlayBuilderMap: {
           'InventoryOverlay': (ctx, FishyFishGame game) => InventoryOverlay(game: game),
+          'WelcomePopup': (ctx, FishyFishGame game) => WelcomePopup(game: game),
         },
       ),
     );

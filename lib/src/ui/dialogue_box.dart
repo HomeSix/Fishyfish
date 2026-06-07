@@ -3,11 +3,12 @@ import 'package:flame/events.dart';
 import 'package:flutter/material.dart' hide Route;
 
 class DialogueBox extends PositionComponent with TapCallbacks {
+  final void Function()? onDismissCallback;
   String name = '';
   String text = '';
   bool _isVisible = false;
 
-  DialogueBox() : super(anchor: Anchor.bottomCenter);
+  DialogueBox({this.onDismissCallback}) : super(anchor: Anchor.bottomCenter);
 
   bool get isVisible => _isVisible;
 
@@ -19,6 +20,11 @@ class DialogueBox extends PositionComponent with TapCallbacks {
 
   void dismiss() {
     _isVisible = false;
+    try {
+      onDismissCallback?.call();
+    } catch (_) {
+      // ignore callback errors
+    }
   }
 
   @override
@@ -52,6 +58,9 @@ class DialogueBox extends PositionComponent with TapCallbacks {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2,
     );
+
+    canvas.save();
+    canvas.clipRRect(rRect);
 
     final nameTp = TextPainter(
       text: TextSpan(
@@ -89,6 +98,8 @@ class DialogueBox extends PositionComponent with TapCallbacks {
       canvas,
       Offset(boxWidth - continueTp.width - 16, boxHeight - 24),
     );
+
+    canvas.restore();
   }
 
   @override
