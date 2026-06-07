@@ -39,7 +39,7 @@ Matlamat utama pemain bukan sekadar untuk bermain, tetapi untuk memulihkan Laut 
             child: Column(
               children: [
                 const Text(
-                  'Welcome to Fishyfish',
+                  'Pengenalan Fishyfish',
                   style: TextStyle(color: Color(0xFFFFD700), fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
