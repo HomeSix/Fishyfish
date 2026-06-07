@@ -23,6 +23,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   final List<BinData> bins = [];
   final List<BinData> welcomeBoards = [];
   final List<BinData> infoBoards = [];
+  final List<BinData> routeBoards = [];
   Rect? minigameStartZone;
   Rect? toBeachZone;
   Rect? toMuseumZone;
@@ -144,6 +145,18 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
               math.max(tiledObject.width, 1),
               math.max(tiledObject.height, 1),
             ));
+          } else if (
+              tiledObject.type == 'to_beach_board' ||
+              tiledObject.type == 'to_museum_board' ||
+              tiledObject.name == 'to beach board' ||
+              tiledObject.name == 'to museum board') {
+            routeBoards.add(BinData(
+              tiledObject.type.isNotEmpty ? tiledObject.type : tiledObject.name,
+              tiledObject.x + tiledObject.width / 2,
+              tiledObject.y + tiledObject.height / 2,
+              math.max(tiledObject.width, 1),
+              math.max(tiledObject.height, 1),
+            ));
           } else if (playerSpawnPoly == null && (tiledObject.type == 'player_spawn' || tiledObject.name == 'player spawn')) {
             playerSpawnPoly = [
               Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2),
@@ -167,6 +180,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
     collisionRects.clear();
     collisionPolys.clear();
     welcomeBoards.clear();
+    routeBoards.clear();
     super.onRemove();
   }
 }

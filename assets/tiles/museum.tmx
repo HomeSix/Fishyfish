@@ -1792,7 +1792,7 @@
   <object id="686" x="595.799" y="469.341" width="12.2079" height="5.83856"/>
   <object id="687" x="602.832" y="457.796" width="5.30779" height="5.0424"/>
  </objectgroup>
- <objectgroup id="18" name="interactibles" visible="0">
+ <objectgroup id="18" name="interactibles">
   <object id="20" name="to hub" type="to_hub" x="1085" y="0" width="98" height="76"/>
   <object id="46" name="int dugong" type="int_dugong" x="2013.33" y="1246" width="53.3333" height="104"/>
   <object id="47" name="int mammoth" type="int_mammoth" x="1429" y="291" width="118" height="86"/>

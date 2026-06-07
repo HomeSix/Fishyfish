@@ -68,13 +68,18 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   static const _welcomeBoardName = 'Welcome Board';
   static const _welcomeBoardDialoguePages = [
-    'Welcome to Fishyfish!',
+    'Selamat datang ke Fishyfish!',
     'Dahulu, lautan dikenali sebagai “Laut Biru Abadi” — tempat yang penuh dengan kehidupan, warna, dan keseimbangan antara manusia dan alam. Ikan-ikan berenang bebas, terumbu karang berkembang, dan hidupan laut hidup harmoni.',
     'Namun, lama-kelamaan, manusia mula mencemarkan laut dengan pelbagai bahan buangan — plastik, sisa toksik, dan sampah sarap. Laut yang dulunya jernih kini semakin keruh. Banyak hidupan laut jatuh sakit, habitat musnah, dan ada yang hampir pupus.',
     'Pemain mengambil peranan sebagai seorang penyelam muda yang berani, dihantar untuk meneroka dan memulihkan lautan. Setiap kali menyelam, pemain akan menemui pelbagai “sea stuff” yang yang masih hidup dan perlukan bantuan, ada juga yang telah rosak akibat pencemaran.',
     'Sepanjang perjalanan, pemain akan:\n\n- Membersihkan ikan dan membantu hidupan laut yang terjejas\n- Mengutip dan mengurus bahan buangan dengan betul\n- Belajar tentang jenis sampah dan kesannya terhadap alam\n- Meneroka kawasan laut berbeza yang semakin terjejas',
     'Namun, semakin dalam pemain menyelam, semakin jelas bahawa kerosakan ini bukan sesuatu yang kecil. Laut sedang “sakit”, dan hanya dengan usaha berterusan, keseimbangan itu boleh dikembalikan.\n\nMatlamat utama pemain bukan sekadar untuk bermain, tetapi untuk memulihkan Laut Biru Abadi dan mengembalikan harapan kepada semua hidupan laut.',
   ];
+
+  static const _routeBoardDialogues = {
+    'to_beach_board': 'Laluan ini menuju ke Pantai.\n\nTeruskan perjalanan untuk ke kawasan pantai.',
+    'to_museum_board': 'Laluan ini menuju ke Muzium.\n\nTeruskan perjalanan untuk ke kawasan muzium.',
+  };
 
   static const _animalDescriptions = {
     'dugong': 'Dugong adalah mamalia laut yang\n'
@@ -860,6 +865,15 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       ));
     }
 
+    for (final routeData in background.routeBoards) {
+      _interactionTargets.add(_InteractionTarget(
+        position: () => Vector2(routeData.x, routeData.y),
+        range: math.max(routeData.width, routeData.height) * 1.5,
+        label: 'read',
+        onInteract: () => _showRouteBoardDialogue(routeData.name),
+      ));
+    }
+
     for (final infoData in background.infoBoards) {
       _interactionTargets.add(_InteractionTarget(
         position: () => Vector2(infoData.x, infoData.y),
@@ -1104,6 +1118,23 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _activeDialoguePages = _welcomeBoardDialoguePages;
     _activeDialogueIndex = 0;
     dialogueBox.show(_welcomeBoardName, _activeDialoguePages!.first);
+  }
+
+  void _showRouteBoardDialogue(String boardKey) {
+    final key = boardKey.toLowerCase();
+    String title = 'Papan Tanda';
+    String text = 'Laluan ini menuju ke destinasi seterusnya.';
+
+    if (_routeBoardDialogues.containsKey(key)) {
+      text = _routeBoardDialogues[key]!;
+      if (key.contains('beach')) {
+        title = 'Papan Pantai';
+      } else if (key.contains('museum')) {
+        title = 'Papan Muzium';
+      }
+    }
+
+    dialogueBox.show(title, text);
   }
 
   void _clearActiveDialogue() {
