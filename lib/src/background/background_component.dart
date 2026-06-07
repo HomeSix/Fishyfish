@@ -40,7 +40,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
 
   void _setupCollision() {
     for (final objectGroup in map.tileMap.map.layers.whereType<ObjectGroup>()) {
-      if (objectGroup.name == 'Collision') {
+      if (objectGroup.name == 'collision') {
         for (final tiledObject in objectGroup.objects) {
           if (tiledObject.isPolygon) {
             final pts = tiledObject.polygon;
@@ -82,7 +82,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
             }
           }
         }
-      } else if (objectGroup.name == 'Interactible') {
+      } else if (objectGroup.name == 'interactible') {
         for (final tiledObject in objectGroup.objects) {
           if (tiledObject.type.endsWith('_bin') || tiledObject.name.endsWith(' bin')) {
             bins.add(BinData(

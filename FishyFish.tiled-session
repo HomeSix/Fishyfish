@@ -98,11 +98,11 @@
                 8,
                 6
             ],
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1785.5,
-                "y": 777
+                "x": 1228.3333333333333,
+                "y": 452
             }
         },
         "assets/tiles/fence_remix.tsx": {
@@ -120,11 +120,15 @@
             "scaleInDock": 1
         },
         "assets/tiles/hub.tmx": {
-            "scale": 0.0625,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                14,
+                13
+            ],
+            "scale": 0.75,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 3208,
-                "y": 1760
+                "x": 819.3333333333333,
+                "y": 353.3333333333333
             }
         },
         "assets/tiles/map1.tmx": {
@@ -163,6 +167,14 @@
             "viewCenter": {
                 "x": -5380.30303030303,
                 "y": 2778.787878787879
+            }
+        },
+        "assets/tiles/musuem.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1957.6666666666665,
+                "y": 214.66666666666669
             }
         },
         "assets/tiles/rocks-snow.tsx": {
