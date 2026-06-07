@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="39" height="26" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="266">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="39" height="26" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="266">
  <tileset firstgid="1" source="../tilesheet/Terrains 2.tsx"/>
  <tileset firstgid="2049" source="../tilesheet/hafiz/spritesheet.tsx"/>
  <tileset firstgid="2497" source="../tilesheet/hafiz/house.tsx"/>
@@ -337,12 +337,12 @@
  </layer>
  <objectgroup id="13" name="spawn point">
   <object id="215" name="player spawn" type="player_spawn" x="168.833" y="269.583" width="16.3333" height="13.3333"/>
-  <object id="216" name="from beach" type="from_beach" x="741" y="67.6667" width="22.3333" height="21.6667"/>
-  <object id="217" name="from museum" type="from_museum" x="793.75" y="781.25" width="11.75" height="12.5"/>
+  <object id="216" name="from beach" type="from_beach" x="741" y="78.3334" width="22.3333" height="21.6667"/>
+  <object id="217" name="from museum" type="from_museum" x="784.417" y="763.917" width="11.75" height="12.5"/>
  </objectgroup>
  <objectgroup id="14" name="interactibles">
-  <object id="218" name="to beach" type="to_beach" x="708.667" y="3" width="85" height="17.3333"/>
-  <object id="219" name="to museum" type="to_museum" x="745.667" y="819.333" width="132" height="9.66667"/>
+  <object id="218" name="to beach" type="to_beach" x="708.667" y="3" width="85" height="35.3333"/>
+  <object id="219" name="to museum" type="to_museum" x="745.667" y="804" width="132" height="25"/>
   <object id="221" name="welcome board" type="welcome_board" x="542.403" y="437.962" width="34.3024" height="31.4342"/>
   <object id="223" name="to beach board" type="to_beach_board" x="670.894" y="215.586" width="33.1226" height="30.8702"/>
   <object id="224" name="to museum board" type="to_museum_board" x="633.473" y="695.058" width="43.9254" height="26.9038"/>

@@ -66,8 +66,10 @@ flutter:
     - assets/trash/
     - assets/tiles/
     - assets/tilesheet/anas/
+    - assets/tilesheet/hafiz/
     - assets/spreadsheet/
     - assets/spreadsheet/anas/
+    - assets/spreadsheet/hafiz/
     - assets/tilesheet/
   #   - images/a_dot_ham.jpeg
 

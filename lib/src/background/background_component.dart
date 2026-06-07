@@ -17,8 +17,12 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   final List<List<Vector2>> collisionPolys = [];
   List<Vector2>? trashSpawnPoly;
   List<Vector2>? playerSpawnPoly;
+  List<Vector2>? fromBeachSpawnPoly;
+  List<Vector2>? fromHubSpawnPoly;
   final List<BinData> bins = [];
   Rect? minigameStartZone;
+  Rect? toBeachZone;
+  Rect? toHubZone;
 
   BackgroundComponent({this.mapName = 'map1'});
 
@@ -80,9 +84,17 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
                 Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2),
               ];
             }
+          } else if (tiledObject.type == 'from_beach') {
+            fromBeachSpawnPoly = tiledObject.isPolygon
+                ? tiledObject.polygon.map((p) => Vector2(tiledObject.x + p.x, tiledObject.y + p.y)).toList()
+                : [Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2)];
+          } else if (tiledObject.type == 'from_hub') {
+            fromHubSpawnPoly = tiledObject.isPolygon
+                ? tiledObject.polygon.map((p) => Vector2(tiledObject.x + p.x, tiledObject.y + p.y)).toList()
+                : [Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2)];
           }
         }
-      } else if (objectGroup.name == 'interactible') {
+      } else if (objectGroup.name == 'interactible' || objectGroup.name == 'interactibles') {
         for (final tiledObject in objectGroup.objects) {
           if (tiledObject.type.endsWith('_bin') || tiledObject.name.endsWith(' bin')) {
             bins.add(BinData(
@@ -94,6 +106,18 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
             ));
           } else if (tiledObject.type == 'minigame_start' || tiledObject.name == 'start minigame') {
             minigameStartZone = Rect.fromLTWH(
+              tiledObject.x, tiledObject.y,
+              math.max(tiledObject.width, 1),
+              math.max(tiledObject.height, 1),
+            );
+          } else if (tiledObject.type == 'to_beach' || tiledObject.name == 'to beach') {
+            toBeachZone = Rect.fromLTWH(
+              tiledObject.x, tiledObject.y,
+              math.max(tiledObject.width, 1),
+              math.max(tiledObject.height, 1),
+            );
+          } else if (tiledObject.type == 'to_hub' || tiledObject.name == 'to hub' || tiledObject.type == 'goto_hub' || tiledObject.name == 'goto hub') {
+            toHubZone = Rect.fromLTWH(
               tiledObject.x, tiledObject.y,
               math.max(tiledObject.width, 1),
               math.max(tiledObject.height, 1),
