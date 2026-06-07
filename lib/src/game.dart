@@ -402,10 +402,13 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     player.position.y = player.position.y.clamp(half.y, mapH - half.y);
 
     final halfViewport = size / 2;
-    camera.viewfinder.position = Vector2(
-      player.position.x.clamp(halfViewport.x, mapW - halfViewport.x).toDouble(),
-      player.position.y.clamp(halfViewport.y, mapH - halfViewport.y).toDouble(),
-    );
+    final clampX = mapW <= halfViewport.x * 2
+        ? mapW / 2
+        : player.position.x.clamp(halfViewport.x, mapW - halfViewport.x).toDouble();
+    final clampY = mapH <= halfViewport.y * 2
+        ? mapH / 2
+        : player.position.y.clamp(halfViewport.y, mapH - halfViewport.y).toDouble();
+    camera.viewfinder.position = Vector2(clampX, clampY);
   }
 
   void _checkMinigameZone() {
