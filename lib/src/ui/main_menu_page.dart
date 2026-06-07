@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'game_page.dart';
 
@@ -12,7 +13,10 @@ class MainMenuPage extends StatefulWidget {
 class _MainMenuPageState extends State<MainMenuPage> {
   bool _isPlayHovered = false;
 
-  void _startGame() {
+  Future<void> _startGame() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('fishyfish_save_data');
+    if (!mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const GamePage()),
     );

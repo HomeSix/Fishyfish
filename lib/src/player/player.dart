@@ -1,13 +1,12 @@
 import 'dart:math' as math;
 import 'package:flame/components.dart';
-import 'package:flame/collisions.dart';
 import 'package:flame/sprite.dart';
 import 'dart:ui' show Image;
 import '../utils/animation_helper.dart';
 
-class Player extends SpriteAnimationComponent with CollisionCallbacks {
+class Player extends SpriteAnimationComponent {
   final double speed = 200;
-  final double characterSize = 110;
+  final double characterSize = 65;
   final double characterSpeed = 0.15;
   final Image image;
   late SpriteAnimation downAnimation;
@@ -20,12 +19,10 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
   late SpriteAnimation idleUpAnimation;
   int direction = 3;
   int _lastDirection = 3;
+  bool canMove = true;
   Player(this.image) : super(anchor: Anchor.center);
   Vector2 _previousPosition = Vector2.zero();
-  bool _collidingX = false;
-  bool _collidingY = false;
   Vector2 _intendedMovement = Vector2.zero();
-  late RectangleHitbox _playerHitbox;
 
   @override
   Future<void> onLoad() async {
@@ -39,22 +36,13 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
     idleUpAnimation = createColumnAnimation(spriteSheet, 2, 1, characterSpeed);
     idleRightAnimation = createColumnAnimation(spriteSheet, 3, 1, characterSpeed);
     animation = idleDownAnimation;
-    position = Vector2(256 + 15, 640);
     size = Vector2.all(characterSize);
     _previousPosition = position.clone();
-    // To see hitboxes of player and collission boxes
-    // debugMode = true;
-    _playerHitbox = RectangleHitbox(
-      position: Vector2(characterSize * 0.38, characterSize * 0.52),
-      size: Vector2(characterSize * 0.24, characterSize * 0.36),
-    )..collisionType = CollisionType.active;
-    add(_playerHitbox);
   }
 
   void updateMovement(JoystickComponent joystick, double dt, Vector2 gameSize) {
+    if (!canMove) return;
     _previousPosition.setFrom(position);
-    _collidingX = false;
-    _collidingY = false;
     _intendedMovement.setZero();
 
     if (joystick.direction != JoystickDirection.idle) {
@@ -105,26 +93,5 @@ class Player extends SpriteAnimationComponent with CollisionCallbacks {
         animation = idleDownAnimation;
         break;
     }
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    if (intersectionPoints.isEmpty) return;
-    if (!_collidingX) {
-      _collidingX = true;
-      position.x = _previousPosition.x;
-    }
-    if (!_collidingY) {
-      _collidingY = true;
-      position.y = _previousPosition.y;
-    }
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    _collidingX = false;
-    _collidingY = false;
   }
 }

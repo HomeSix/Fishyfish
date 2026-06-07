@@ -10,8 +10,6 @@ class Bin extends PositionComponent {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    debugMode = true;
-
     add(
       RectangleHitbox(
         position: Vector2(1, 8),
@@ -19,27 +17,6 @@ class Bin extends PositionComponent {
         collisionType: CollisionType.passive,
       ),
     );
-
-    final body = RectangleComponent(
-      size: Vector2(40, 46),
-      position: Vector2(4, 16),
-      paint: Paint()..color = const Color(0xFF37474F),
-    );
-    add(body);
-
-    final rim = RectangleComponent(
-      size: Vector2(46, 8),
-      position: Vector2(1, 8),
-      paint: Paint()..color = const Color(0xFF546E7A),
-    );
-    add(rim);
-
-    final lid = RectangleComponent(
-      size: Vector2(30, 4),
-      position: Vector2(9, 14),
-      paint: Paint()..color = const Color(0xFF455A64),
-    );
-    add(lid);
 
     priority = position.y.toInt();
   }
