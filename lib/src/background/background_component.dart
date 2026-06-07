@@ -19,6 +19,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   List<Vector2>? playerSpawnPoly;
   List<Vector2>? fromBeachSpawnPoly;
   List<Vector2>? fromHubSpawnPoly;
+  List<Vector2>? fromMuseumSpawnPoly;
   final List<BinData> bins = [];
   Rect? minigameStartZone;
   Rect? toBeachZone;
@@ -45,7 +46,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
 
   void _setupCollision() {
     for (final objectGroup in map.tileMap.map.layers.whereType<ObjectGroup>()) {
-      if (objectGroup.name == 'collision') {
+      if (objectGroup.name == 'collision' || objectGroup.name == 'collission') {
         for (final tiledObject in objectGroup.objects) {
           if (tiledObject.isPolygon) {
             final pts = tiledObject.polygon;
@@ -93,6 +94,10 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
             fromHubSpawnPoly = tiledObject.isPolygon
                 ? tiledObject.polygon.map((p) => Vector2(tiledObject.x + p.x, tiledObject.y + p.y)).toList()
                 : [Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2)];
+          } else if (tiledObject.type == 'from_museum') {
+            fromMuseumSpawnPoly = tiledObject.isPolygon
+                ? tiledObject.polygon.map((p) => Vector2(tiledObject.x + p.x, tiledObject.y + p.y)).toList()
+                : [Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2)];
           }
         }
       } else if (objectGroup.name == 'interactible' || objectGroup.name == 'interactibles') {
@@ -129,6 +134,14 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
               math.max(tiledObject.width, 1),
               math.max(tiledObject.height, 1),
             );
+          } else if (tiledObject.type == 'from_hub') {
+            fromHubSpawnPoly = [
+              Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2),
+            ];
+          } else if (tiledObject.type == 'from_museum') {
+            fromMuseumSpawnPoly = [
+              Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2),
+            ];
           }
         }
       }

@@ -468,13 +468,14 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     final toMuseum = background.toMuseumZone;
     if (toMuseum != null && feetRect.overlaps(toMuseum) && currentMap == 'hub') {
-      changeMap('museum');
+      changeMap('museum', 'from_hub');
       return;
     }
 
     final toHub = background.toHubZone;
-    if (toHub != null && feetRect.overlaps(toHub) && currentMap == 'beach') {
-      changeMap('hub', 'from_beach');
+    if (toHub != null && feetRect.overlaps(toHub)) {
+      if (currentMap == 'beach') changeMap('hub', 'from_beach');
+      if (currentMap == 'museum') changeMap('hub', 'from_museum');
     }
   }
 
@@ -769,6 +770,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       poly = background.fromBeachSpawnPoly;
     } else if (spawnType == 'from_hub') {
       poly = background.fromHubSpawnPoly;
+    } else if (spawnType == 'from_museum') {
+      poly = background.fromMuseumSpawnPoly;
     } else {
       poly = background.playerSpawnPoly;
     }
