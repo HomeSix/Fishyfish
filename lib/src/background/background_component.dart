@@ -22,6 +22,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   List<Vector2>? fromMuseumSpawnPoly;
   final List<BinData> bins = [];
   final List<BinData> welcomeBoards = [];
+  final List<BinData> infoBoards = [];
   Rect? minigameStartZone;
   Rect? toBeachZone;
   Rect? toMuseumZone;
@@ -137,6 +138,18 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
             );
           } else if (tiledObject.type == 'welcome_board' || tiledObject.name == 'welcome board') {
             welcomeBoards.add(BinData(
+              tiledObject.name,
+              tiledObject.x + tiledObject.width / 2,
+              tiledObject.y + tiledObject.height / 2,
+              math.max(tiledObject.width, 1),
+              math.max(tiledObject.height, 1),
+            ));
+          } else if (playerSpawnPoly == null && (tiledObject.type == 'player_spawn' || tiledObject.name == 'player spawn')) {
+            playerSpawnPoly = [
+              Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2),
+            ];
+          } else if (tiledObject.type.startsWith('int_') || tiledObject.name.startsWith('int ')) {
+            infoBoards.add(BinData(
               tiledObject.name,
               tiledObject.x + tiledObject.width / 2,
               tiledObject.y + tiledObject.height / 2,

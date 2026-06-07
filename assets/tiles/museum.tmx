@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="86" height="76" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="54">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="86" height="76" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="57">
  <tileset firstgid="1" source="../tilesheet/Terrains 2.tsx"/>
  <tileset firstgid="2049" source="../tilesheet/anas/fence_remix.tsx"/>
  <tileset firstgid="2070" source="../tilesheet/Beach Desert 2.tsx"/>
@@ -1286,7 +1286,6 @@
  </objectgroup>
  <objectgroup id="18" name="interactibles">
   <object id="20" name="to hub" type="to_hub" x="1085" y="0" width="98" height="76"/>
-  <object id="21" name="from hub" type="from_hub" x="1117" y="113" width="36" height="35"/>
   <object id="46" name="int dugong" type="int_dugong" x="2013.33" y="1246" width="53.3333" height="104"/>
   <object id="47" name="int mammoth" type="int_mammoth" x="1429" y="291" width="118" height="86"/>
   <object id="48" name="int dino" type="int_dino" x="1460" y="440.5" width="119.5" height="110"/>
@@ -1295,5 +1294,10 @@
   <object id="51" name="int rhino" type="int_rhino" x="608.667" y="1632.67" width="210.667" height="142.667"/>
   <object id="52" name="int orang utan" type="int_orang_utan" x="274" y="1646.67" width="116" height="130"/>
   <object id="53" name="int dodo bird" type="int_dodo_bird" x="497" y="2001.5" width="113.5" height="129"/>
+  <object id="55" name="int elephant" type="int_elephant" x="532" y="470.667" width="168" height="162.667"/>
+  <object id="56" name="int harimau malaya" type="int_harimau_malaya" x="430.667" y="667.333" width="134.667" height="111.333"/>
+ </objectgroup>
+ <objectgroup id="19" name="spawn point">
+  <object id="54" name="player spawn" type="player_spawn" x="1118" y="119.833" width="36" height="35"/>
  </objectgroup>
 </map>

@@ -76,6 +76,43 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     'Namun, semakin dalam pemain menyelam, semakin jelas bahawa kerosakan ini bukan sesuatu yang kecil. Laut sedang “sakit”, dan hanya dengan usaha berterusan, keseimbangan itu boleh dikembalikan.\n\nMatlamat utama pemain bukan sekadar untuk bermain, tetapi untuk memulihkan Laut Biru Abadi dan mengembalikan harapan kepada semua hidupan laut.',
   ];
 
+  static const _animalDescriptions = {
+    'dugong': 'Dugong adalah mamalia laut yang\n'
+        'lembut dan memakan rumput laut.\n'
+        'Ia juga dikenali sebagai "lembu laut"!\n'
+        'Status: Terancam',
+    'mammoth': 'Mammoth ialah gajah purba yang\n'
+        'hidup zaman air batu.\n'
+        'Status: Sudah pupus',
+    'dino': 'Dinosaur adalah reptilia gergasi\n'
+        'yang hidup jutaan tahun dahulu.\n'
+        'Mereka pupus akibat meteor!\n'
+        'Status: Sudah pupus',
+    'tasmanian': 'Harimau Tasmania (Thylacine) ialah\n'
+        'marsupial karnivor.\n'
+        'Status: Sudah pupus',
+    'tapir': 'Tapir adalah haiwan yang pemalu\n'
+        'dan suka tinggal di hutan tebal.\n'
+        'Status: Terancam',
+    'rhino': 'Badak sumbu adalah haiwan besar\n'
+        'dengan satu atau dua tanduk.\n'
+        'Status: Terancam',
+    'orang utan': 'Orang utan adalah monyet merah\n'
+        'yang bijak dan tinggal di pokok.\n'
+        'Status: Terancam',
+    'dodo bird': 'Burung Dodo tidak boleh terbang.\n'
+        'Ia pupus sejak tahun 1600-an.\n'
+        'Status: Sudah pupus',
+    'elephant': 'Gajah adalah haiwan darat\n'
+        'terbesar di dunia. Ia sangat\n'
+        'pintar dan kuat.\n'
+        'Status: Terancam',
+    'harimau malaya': 'Harimau Malaya adalah simbol\n'
+        'kebanggaan Malaysia. Kini hanya\n'
+        'tinggal kurang dari 150 ekor!\n'
+        'Status: Terancam',
+  };
+
   List<String> inventory = ["test item", "mavinesh"];
   void addItemToInventory(String item) {
     inventory.add(item);
@@ -485,7 +522,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     final toMuseum = background.toMuseumZone;
     if (toMuseum != null && feetRect.overlaps(toMuseum) && currentMap == 'hub') {
-      changeMap('museum', 'from_hub');
+      changeMap('museum');
       return;
     }
 
@@ -822,6 +859,15 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         onInteract: _showWelcomeBoardDialogue,
       ));
     }
+
+    for (final infoData in background.infoBoards) {
+      _interactionTargets.add(_InteractionTarget(
+        position: () => Vector2(infoData.x, infoData.y),
+        range: math.max(infoData.width, infoData.height) * 1.5,
+        label: 'info',
+        onInteract: () => _showInfoBoardDialogue(infoData.name),
+      ));
+    }
   }
 
   void _setPlayerToSpawn([String? spawnType]) {
@@ -1045,6 +1091,13 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _scoreText.text = '';
     _timerText.text = '';
     dialogueBox.show('Game Over', 'Your score: $score\nHigh score: $highScore');
+  }
+
+  void _showInfoBoardDialogue(String name) {
+    final animalKey = name.split(' ').skip(1).join(' ');
+    final desc = _animalDescriptions[animalKey];
+    final displayName = animalKey[0].toUpperCase() + animalKey.substring(1);
+    dialogueBox.show(displayName, desc ?? 'Tiada maklumat.');
   }
 
   void _showWelcomeBoardDialogue() {
