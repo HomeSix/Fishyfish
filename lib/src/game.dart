@@ -66,7 +66,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   ];
   int _npcDialogueIndex = 0;
 
-  static const _welcomeBoardName = 'Welcome Board';
+  static const _welcomeBoardName = 'Papan Utama';
   static const _welcomeBoardDialoguePages = [
     'Selamat datang ke Fishyfish!',
     'Dahulu, lautan dikenali sebagai “Laut Biru Abadi” — tempat yang penuh dengan kehidupan, warna, dan keseimbangan antara manusia dan alam. Ikan-ikan berenang bebas, terumbu karang berkembang, dan hidupan laut hidup harmoni.',
