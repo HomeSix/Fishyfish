@@ -225,7 +225,6 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     // Camera setup
     camera.viewfinder.anchor = Anchor.center;
-    camera.follow(player, maxSpeed: double.infinity);
   }
 
   Future<void> _scatterTrash() async {
@@ -396,11 +395,17 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     super.update(dt);
 
     final map = background.map.tileMap.map;
-    final mapW = map.width * map.tileWidth;
-    final mapH = map.height * map.tileHeight;
+    final double mapW = (map.width * map.tileWidth).toDouble();
+    final double mapH = (map.height * map.tileHeight).toDouble();
     final half = player.size / 2;
     player.position.x = player.position.x.clamp(half.x, mapW - half.x);
     player.position.y = player.position.y.clamp(half.y, mapH - half.y);
+
+    final halfViewport = size / 2;
+    camera.viewfinder.position = Vector2(
+      player.position.x.clamp(halfViewport.x, mapW - halfViewport.x).toDouble(),
+      player.position.y.clamp(halfViewport.y, mapH - halfViewport.y).toDouble(),
+    );
   }
 
   void _checkMinigameZone() {
@@ -609,8 +614,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     // Adjust placement: move 5 pixels left and 15 pixels lower from previous values
     heldItem!.position = Vector2(
       // Nudge: 5px further left and additional 7px lower
-      player.size.x * 0.72 - 25,
-      -player.size.y * 0.45 + 67,
+      player.size.x * 0.72 - 15,
+      -player.size.y * 0.45 + 40,
     );
     // Ensure it renders above the player
     heldItem!.priority = player.priority + 1;
@@ -648,15 +653,17 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   Vector2 _findDropPosition() {
     final itemSize = heldItem?.size.clone() ?? Vector2.all(48);
-    final frontDrop = player.position + _directionVector(player.direction) * 64.0;
+    final frontDrop = player.position + _directionVector(player.direction) * 32.0;
 
-    final map = background.map.tileMap.map;
-    final mapW = map.width * map.tileWidth;
-    final mapH = map.height * map.tileHeight;
-    final half = itemSize / 2;
-    if (frontDrop.x - half.x >= 0 && frontDrop.x + half.x <= mapW &&
-        frontDrop.y - half.y >= 0 && frontDrop.y + half.y <= mapH) {
-      return frontDrop;
+    if (!_wouldCollideWithMap(frontDrop, itemSize)) {
+      final map = background.map.tileMap.map;
+      final mapW = map.width * map.tileWidth;
+      final mapH = map.height * map.tileHeight;
+      final half = itemSize / 2;
+      if (frontDrop.x - half.x >= 0 && frontDrop.x + half.x <= mapW &&
+          frontDrop.y - half.y >= 0 && frontDrop.y + half.y <= mapH) {
+        return frontDrop;
+      }
     }
 
     return _playerFeetDropPosition(itemSize);
