@@ -22,6 +22,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   final List<BinData> bins = [];
   Rect? minigameStartZone;
   Rect? toBeachZone;
+  Rect? toMuseumZone;
   Rect? toHubZone;
 
   BackgroundComponent({this.mapName = 'map1'});
@@ -112,6 +113,12 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
             );
           } else if (tiledObject.type == 'to_beach' || tiledObject.name == 'to beach') {
             toBeachZone = Rect.fromLTWH(
+              tiledObject.x, tiledObject.y,
+              math.max(tiledObject.width, 1),
+              math.max(tiledObject.height, 1),
+            );
+          } else if (tiledObject.type == 'to_museum' || tiledObject.name == 'to museum') {
+            toMuseumZone = Rect.fromLTWH(
               tiledObject.x, tiledObject.y,
               math.max(tiledObject.width, 1),
               math.max(tiledObject.height, 1),

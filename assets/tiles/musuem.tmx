@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="86" height="76" tilewidth="32" tileheight="32" infinite="0" nextlayerid="18" nextobjectid="20">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="86" height="76" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="54">
  <tileset firstgid="1" source="../tilesheet/Terrains 2.tsx"/>
  <tileset firstgid="2049" source="../tilesheet/anas/fence_remix.tsx"/>
  <tileset firstgid="2070" source="../tilesheet/Beach Desert 2.tsx"/>
@@ -1264,5 +1264,36 @@
   <object id="19" x="2083.5" y="1208.5">
    <polygon points="0,0 -2.5,-341.5 533,-340 538,453 -1,450.5 -4.5,142 12.5,142 16,439 523.5,438 522.5,-331 13,-329.5 15,0"/>
   </object>
+  <object id="23" x="1444.67" y="310.667" width="88.6667" height="49.3333"/>
+  <object id="24" x="1477.33" y="463.333" width="85.3333" height="66"/>
+  <object id="25" x="1697.33" y="398" width="93.3333" height="61.3333"/>
+  <object id="26" x="1708.67" y="516" width="68" height="80.6667"/>
+  <object id="27" x="556.667" y="492" width="121.333" height="115.333"/>
+  <object id="28" x="457.333" y="684" width="82" height="71.3333"/>
+  <object id="29" x="830.667" y="698" width="64" height="66.6667"/>
+  <object id="30" x="545.333" y="410.667" width="86.6667" height="64.6667"/>
+  <object id="31" x="154" y="431.333" width="74" height="87.3333"/>
+  <object id="33" x="354.667" y="517.333" width="106.667" height="112.667"/>
+  <object id="36" x="657" y="1652" width="139" height="102"/>
+  <object id="37" x="669.5" y="1568.5" width="104.5" height="67"/>
+  <object id="38" x="298" y="1666" width="71" height="90"/>
+  <object id="39" x="608" y="1759.5" width="96" height="65"/>
+  <object id="40" x="606.5" y="1984" width="100" height="66"/>
+  <object id="42" x="523" y="2028.25" width="60.5" height="76.25"/>
+  <object id="43" x="128.5" y="1855" width="96.5" height="64.5"/>
+  <object id="44" x="127" y="1567" width="98" height="64"/>
+  <object id="45" x="2070" y="1213.33" width="28" height="132.667"/>
+ </objectgroup>
+ <objectgroup id="18" name="interactibles">
+  <object id="20" name="to hub" type="to_hub" x="1085" y="0" width="98" height="76"/>
+  <object id="21" name="from hub" type="from_hub" x="1117" y="113" width="36" height="35"/>
+  <object id="46" name="int dugong" type="int_dugong" x="2013.33" y="1246" width="53.3333" height="104"/>
+  <object id="47" name="int mammoth" type="int_mammoth" x="1429" y="291" width="118" height="86"/>
+  <object id="48" name="int dino" type="int_dino" x="1460" y="440.5" width="119.5" height="110"/>
+  <object id="49" name="int tasmanian" type="int_tasmanian" x="1673.5" y="375" width="131" height="98"/>
+  <object id="50" name="int tapir" type="int_tapir" x="1682" y="498.5" width="119.5" height="121"/>
+  <object id="51" name="int rhino" type="int_rhino" x="608.667" y="1632.67" width="210.667" height="142.667"/>
+  <object id="52" name="int orang utan" type="int_orang_utan" x="274" y="1646.67" width="116" height="130"/>
+  <object id="53" name="int dodo bird" type="int_dodo_bird" x="497" y="2001.5" width="113.5" height="129"/>
  </objectgroup>
 </map>

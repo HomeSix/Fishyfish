@@ -494,6 +494,12 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       return;
     }
 
+    final toMuseum = background.toMuseumZone;
+    if (toMuseum != null && feetRect.overlaps(toMuseum) && currentMap == 'hub') {
+      changeMap('museum');
+      return;
+    }
+
     final toHub = background.toHubZone;
     if (toHub != null && feetRect.overlaps(toHub) && currentMap == 'beach') {
       changeMap('hub', 'from_beach');
