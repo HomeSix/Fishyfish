@@ -43,7 +43,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   int score = 0;
   int highScore = 0;
-  double _timeRemaining = 60;
+  double _timeRemaining = 120;
   String _minigameState = 'idle'; // idle | pending | active | finished
 
   static const _npcName = 'Ranger Jack';
@@ -59,7 +59,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     "Lepas tu pergi dekat tong yang\n"
         "betul dan tekan butang interaksi\n"
         "lagi. Betul +1, salah -1.",
-    "Kau ada 60 saat. Berani\n"
+    "Kau ada 120 saat. Berani\n"
         "ke tak? Jom bersihkan pantai!",
   ];
   int _npcDialogueIndex = 0;
@@ -246,7 +246,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (poly == null || poly.length < 3) return;
 
     for (final file in files) {
-      try {
+      for (var n = 0; n < 3; n++) {
+        try {
         final data = await rootBundle.load('assets/trash/$file');
         final bytes = data.buffer.asUint8List();
         final codec = await ui.instantiateImageCodec(bytes);
@@ -291,44 +292,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       } catch (e) {
         // ignore missing assets or decode errors
       }
+      }
     }
   }
-
-  // Future<void> _placeBinNearPlayer() async {
-  //   final tileDistance = 5 * 64.0;
-  //   final binSize = Vector2(48, 64);
-  //   final playerStart = Vector2(271, 640);
-
-  //   final candidates = [
-  //     playerStart + Vector2(tileDistance, 0),
-  //     playerStart + Vector2(-tileDistance, 0),
-  //     playerStart + Vector2(0, tileDistance),
-  //     playerStart + Vector2(0, -tileDistance),
-  //   ];
-
-  //   Vector2? chosen;
-  //   for (final pos in candidates) {
-  //     if (!_wouldCollideWithMap(pos, binSize)) {
-  //       chosen = pos;
-  //       break;
-  //     }
-  //   }
-
-  //   chosen ??= candidates.first;
-
-  //   final bin = Bin(position: chosen);
-  //   await world.add(bin);
-
-  //   final binTarget = _InteractionTarget(
-  //     position: () => bin.position,
-  //     range: 60,
-  //     label: 'sort',
-  //     onInteract: () {
-  //       // TODO: implement trash sorting logic
-  //     },
-  //   );
-  //   _interactionTargets.add(binTarget);
-  // }
 
   @override
   void onGameResize(Vector2 canvasSize) {
@@ -363,6 +329,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     }
     banana?.removeFromParent();
     banana = null;
+    for (final comp in _itemTargets.keys) {
+      comp.removeFromParent();
+    }
     _interactionTargets.clear();
     _itemTargets.clear();
     _trashFilenames.clear();
@@ -370,7 +339,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     _minigameState = 'idle';
     score = 0;
-    _timeRemaining = 60;
+    _timeRemaining = 120;
     _scoreText.text = '';
     _timerText.text = '';
 
@@ -995,9 +964,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   void _startMinigame() {
     _minigameState = 'active';
     score = 0;
-    _timeRemaining = 60;
+    _timeRemaining = 120;
     _scoreText.text = 'Score: 0';
-    _timerText.text = '60';
+    _timerText.text = '120';
   }
 
   void _endGame() {
