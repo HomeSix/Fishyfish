@@ -276,12 +276,13 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
           shadows: [Shadow(color: Color(0x80000000), blurRadius: 4, offset: Offset(2, 2))],
         ),
       ),
-      text: 'High Score: $highScore',
+      text: '',
       anchor: Anchor.topRight,
       position: Vector2(size.x - 16, 48),
     );
     _highScoreText.priority = 100;
     camera.viewport.add(_highScoreText);
+    if (currentMap == 'beach') _highScoreText.text = 'High Score: $highScore';
 
     _startAutoSave();
 
@@ -403,6 +404,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _timerText.text = '';
 
     currentMap = newMap;
+    _highScoreText.text = newMap == 'beach' ? 'High Score: $highScore' : '';
     background = BackgroundComponent(mapName: newMap);
     background.priority = -1;
     await world.add(background);
