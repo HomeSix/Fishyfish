@@ -1,83 +1,24 @@
 {
-    "activeFile": "/home/azik/repos/Project/map1.tmx",
+    "activeFile": "assets/tiles/hub.tmx",
     "expandedProjectPaths": [
-        "assets/tiles",
-        "assets",
-        ".",
-        "ios/Runner/Assets.xcassets/LaunchImage.imageset",
-        "ios/Runner/Assets.xcassets/AppIcon.appiconset",
-        "assets/tiles/map1",
-        "assets/tilesheet/anas",
-        "ios/Runner/Assets.xcassets",
-        "assets/tiles/map2",
-        "assets/tilesheet/hafiz",
         "assets/tilesheet",
-        "assets/tiles/house"
+        "android/app",
+        "assets",
+        "assets/tilesheet/hafiz",
+        "assets/tiles/map1",
+        "android/app/src/debug",
+        "ios/Runner/Assets.xcassets/AppIcon.appiconset",
+        ".",
+        "assets/tiles/house",
+        "ios/Runner/Assets.xcassets",
+        "ios/Runner/Assets.xcassets/LaunchImage.imageset",
+        "assets/tiles/map2",
+        "assets/tiles",
+        "android/app/src"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/Beach/Beach1.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/Beach/Beach2.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/House/House2.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/House/house1.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/Nature/tree-1.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/Terrains/Terrain2.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Assets/spritesheet2.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/Beach.tsx": {
-            "dynamicWrapping": true,
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/map1.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 946,
-                "y": -184
-            }
-        },
-        "/home/azik/repos/Project/spritesheet.tsx": {
-            "scaleInDock": 1
-        },
-        "/home/azik/repos/Project/spritesheet3.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Assets/Beach/Beach2.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Assets/House/House2.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Assets/House/house1.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Assets/Nature/tree-1.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Assets/Terrains/Terrain2.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Assets/spritesheet2.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tiles/Beach.tsx": {
-            "dynamicWrapping": true,
             "scaleInDock": 1
         },
         "assets/tiles/WaterAndFire.tsx": {
@@ -93,16 +34,11 @@
             "scaleInDock": 1
         },
         "assets/tiles/beach.tmx": {
-            "expandedObjectLayers": [
-                7,
-                8,
-                6
-            ],
-            "scale": 4,
-            "selectedLayer": 3,
+            "scale": 0.4639,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1150.375,
-                "y": 987.5
+                "x": 1122.0090536753612,
+                "y": 602.5005389092478
             }
         },
         "assets/tiles/fence_remix.tsx": {
@@ -121,22 +57,14 @@
         },
         "assets/tiles/hub.tmx": {
             "expandedObjectLayers": [
-                14,
+                12,
                 13
             ],
-            "scale": 1.5,
-            "selectedLayer": 11,
+            "scale": 1.6672,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 859.6666666666666,
-                "y": 739.3333333333333
-            }
-        },
-        "assets/tiles/map1.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
-            "viewCenter": {
-                "x": 869.5,
-                "y": -128
+                "x": 549.1242802303263,
+                "y": 453.154990403071
             }
         },
         "assets/tiles/map1/map.tmx": {
@@ -155,7 +83,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 96.0111722091298,
-                "y": 43.32024090075936
+                "y": 43.473858776293966
             }
         },
         "assets/tiles/map2/map.tmx#spritefusion": {
@@ -170,11 +98,11 @@
             }
         },
         "assets/tiles/musuem.tmx": {
-            "scale": 0.5,
-            "selectedLayer": 14,
+            "scale": 0.29648437499999997,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 2369,
-                "y": 776
+                "x": 374.3873517786562,
+                "y": 1215.9156785243742
             }
         },
         "assets/tiles/rocks-snow.tsx": {
@@ -186,8 +114,13 @@
         "assets/tiles/spritesheet.tsx": {
             "scaleInDock": 1
         },
-        "assets/tiles/spritesheet3.tsx": {
-            "scaleInDock": 1
+        "assets/tiles/starter-map.tmx": {
+            "scale": 0.7352,
+            "selectedLayer": 10,
+            "viewCenter": {
+                "x": -48.28618063112083,
+                "y": 27.88356909684444
+            }
         },
         "assets/tiles/terrain-map-v7.tsx": {
             "scaleInDock": 1
@@ -200,7 +133,6 @@
             "scaleInEditor": 1
         },
         "assets/tilesheet/Beach Desert.tsx": {
-            "dynamicWrapping": false,
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -237,60 +169,49 @@
             "scaleInEditor": 1
         },
         "assets/tilesheet/basic.tsx": {
-            "dynamicWrapping": false,
-            "scaleInDock": 0.125,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "assets/tilesheet/bin 64 but 32.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInDock": 1
         },
         "assets/tilesheet/fence_remix.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "assets/tilesheet/hafiz/House2.tsx": {
-            "scaleInDock": 1
-        },
-        "assets/tilesheet/hafiz/basic2.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
-        },
-        "assets/tilesheet/hafiz/basic3.tsx": {
-            "dynamicWrapping": false,
-            "scaleInDock": 1,
-            "scaleInEditor": 1
-        },
-        "assets/tilesheet/hafiz/bin 64 but 32.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
-        },
         "assets/tilesheet/hafiz/fence-test.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 0.7469,
+            "scaleInEditor": 1
         },
-        "assets/tilesheet/hafiz/house1.tsx": {
+        "assets/tilesheet/hafiz/house.tsx": {
+            "scaleInDock": 0.5362,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/hafiz/signboard-1-sheet.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "assets/tilesheet/hafiz/house2.tsx": {
+        "assets/tilesheet/hafiz/signboard-1.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "assets/tilesheet/hafiz/signboard.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "assets/tilesheet/hafiz/spritesheet.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 0.5753,
+            "scaleInEditor": 1
         },
-        "assets/tilesheet/hafiz/tree-1.tsx": {
-            "scaleInDock": 1,
+        "assets/tilesheet/hafiz/tree.tsx": {
+            "scaleInDock": 0.2975,
+            "scaleInEditor": 1
+        },
+        "assets/tilesheet/hafiz/water.tsx": {
+            "scaleInDock": 0.5557,
             "scaleInEditor": 1
         },
         "assets/tilesheet/recycle Bins.tsx": {
-            "scaleInDock": 1,
-            "scaleInEditor": 1
-        },
-        "assets/tilesheet/recycle bins 64.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -309,9 +230,6 @@
         "assets/tilesheet/water-fire.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
-        },
-        "tilesheet/Terrains 2.tsx": {
-            "scaleInDock": 1
         }
     },
     "last.exportedFilePath": "/home/azik",
@@ -321,22 +239,28 @@
     "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
-        "/home/azik/repos/Project/map1.tmx"
+        "assets/tilesheet/Terrains 2.tsx",
+        "assets/tilesheet/hafiz/spritesheet.tsx",
+        "assets/tilesheet/hafiz/house.tsx",
+        "assets/tilesheet/hafiz/fence-test.tsx",
+        "assets/tilesheet/hafiz/signboard.tsx",
+        "assets/tiles/hub.tmx",
+        "assets/tiles/musuem.tmx"
     ],
     "project": "FishyFish.tiled-project",
     "recentFiles": [
+        "assets/tiles/musuem.tmx",
+        "assets/tilesheet/Terrains 2.tsx",
+        "assets/tilesheet/hafiz/spritesheet.tsx",
+        "assets/tilesheet/hafiz/house.tsx",
+        "assets/tilesheet/hafiz/fence-test.tsx",
+        "assets/tilesheet/hafiz/signboard.tsx",
         "assets/tiles/hub.tmx",
-        "/home/azik/repos/Project/map1.tmx",
         "assets/tiles/beach.tmx",
-        "assets/tilesheet/hafiz/tree-1.tsx",
-        "assets/tilesheet/hafiz/basic3.tsx",
-        "assets/tilesheet/hafiz/basic2.tsx",
-        "assets/tilesheet/hafiz/house1.tsx",
-        "assets/tilesheet/hafiz/house2.tsx",
-        "assets/tilesheet/bin 64 but 32.tsx",
-        "assets/tilesheet/recycle bins 64.tsx",
-        "assets/tiles/museum.tmx",
-        "assets/tilesheet/anas/fence_remix.tsx"
+        "assets/tilesheet/hafiz/signboard-1-sheet.tsx",
+        "assets/tilesheet/hafiz/signboard-1.tsx",
+        "assets/tiles/starter-map.tmx",
+        "assets/tilesheet/hafiz/tree.tsx"
     ],
     "resizeMap.removeObjects": false,
     "tileset.lastUsedFormat": "tsx",
