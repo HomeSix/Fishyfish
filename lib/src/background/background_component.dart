@@ -20,6 +20,7 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
   List<Vector2>? fromBeachSpawnPoly;
   List<Vector2>? fromHubSpawnPoly;
   List<Vector2>? fromMuseumSpawnPoly;
+  Vector2? jackSpawnPos;
   final List<BinData> bins = [];
   final List<BinData> welcomeBoards = [];
   final List<BinData> infoBoards = [];
@@ -101,6 +102,11 @@ class BackgroundComponent extends PositionComponent with HasGameReference {
             fromMuseumSpawnPoly = tiledObject.isPolygon
                 ? tiledObject.polygon.map((p) => Vector2(tiledObject.x + p.x, tiledObject.y + p.y)).toList()
                 : [Vector2(tiledObject.x + tiledObject.width / 2, tiledObject.y + tiledObject.height / 2)];
+          } else if (tiledObject.type == 'jack_spawn' || tiledObject.name == 'jack spawn') {
+            jackSpawnPos = Vector2(
+              tiledObject.x + tiledObject.width / 2,
+              tiledObject.y + tiledObject.height / 2,
+            );
           }
         }
       } else if (objectGroup.name == 'interactible' || objectGroup.name == 'interactibles') {

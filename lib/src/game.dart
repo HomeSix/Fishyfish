@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' show Image, FontWeight, Color, Offset, Shadow, Rect, TextStyle;
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 import 'package:flame/text.dart';
 
@@ -11,12 +12,12 @@ import 'onScreen/joystick.dart';
 import 'background/background_component.dart';
 import 'items/banana_peel.dart';
 import 'items/bin.dart';
+import 'npc/ranger_jack.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui show instantiateImageCodec;
 import 'onScreen/interact_button.dart';
 import 'ui/dialogue_box.dart';
-import 'onScreen/inventory_button.dart';
 import 'utils/save_manager.dart';
 
 class FishyFishGame extends FlameGame with HasCollisionDetection {
@@ -24,10 +25,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   late JoystickComponent joystick;
   late BackgroundComponent background;
   late InteractButton interactButton;
-  late InventoryButton inventoryButton;
   late DialogueBox dialogueBox;
   late Image _bananaImage;
   BananaPeel? banana;
+  RangerJackNPC? rangerJack;
   SpriteComponent? heldItem;
   final Map<PositionComponent, _InteractionTarget> _itemTargets = {};
   final Map<PositionComponent, String> _trashFilenames = {};
@@ -43,7 +44,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
   int score = 0;
   int highScore = 0;
-  double _timeRemaining = 120;
+  double _timeRemaining = 60;
   String _minigameState = 'idle'; // idle | pending | active | finished
   List<String>? _activeDialoguePages;
   int _activeDialogueIndex = 0;
@@ -55,13 +56,14 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         "aku bersihkan semua ni!",
     "Ada 3 tong sampah:\n"
         "Perang untuk sisa makanan,\n"
-        "Biru untuk kertas, Kuning untuk plastik.",
+        "Biru untuk kertas, Kuning untuk plastik.\n"
+        "Lokasi tong ada di atas kiri.",
     "Pergi dekat sampah dan tekan\n"
         "butang interaksi untuk ambil.",
     "Lepas tu pergi dekat tong yang\n"
         "betul dan tekan butang interaksi\n"
         "lagi. Betul +1, salah -1.",
-    "Kau ada 120 saat. Berani\n"
+    "Kau ada 60 saat. Berani\n"
         "ke tak? Jom bersihkan pantai!",
   ];
   int _npcDialogueIndex = 0;
@@ -131,6 +133,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     'Plastic Bag.png': 'yellow',
     'Plastic Bottle.png': 'yellow',
     'Tin.png': 'yellow',
+    'Fish Bone.png': 'brown',
+    'Watermelon RInd.png': 'brown',
   };
 
   @override
@@ -142,7 +146,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     background.priority = -1;
     await world.add(background);
 
-    final image = await images.load('Apin.png');
+    final image = await images.load('characters/Apin.png');
 
     // Player - add to the default world
     player = Player(image);
@@ -179,6 +183,14 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       _itemTargets[banana!] = bananaTarget;
     }
 
+    // Ranger Jack NPC - only on beach map
+    if (currentMap == 'beach' && background.jackSpawnPos != null) {
+      final jackImage = await images.load('characters/ranger_Jack.png');
+      rangerJack = RangerJackNPC(jackImage);
+      rangerJack!.position = background.jackSpawnPos!;
+      await world.add(rangerJack!);
+    }
+
     // Scatter remaining trash assets across the map
     await _scatterTrash();
 
@@ -197,13 +209,6 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       onTap: _handleInteract,
     );
     camera.viewport.add(interactButton);
-
-    inventoryButton = InventoryButton(
-      onTap: () {
-        overlays.add('InventoryOverlay');
-      },
-    );
-    camera.viewport.add(inventoryButton);
 
     _hudReady = true;
     _updateHudLayout();
@@ -285,12 +290,16 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (currentMap == 'beach') _highScoreText.text = 'High Score: $highScore';
 
     _startAutoSave();
+    _playMainTheme();
 
     // Camera setup
     camera.viewfinder.anchor = Anchor.center;
   }
 
+  final List<Rect> _placedTrashRects = [];
+
   Future<void> _scatterTrash() async {
+    _placedTrashRects.clear();
     final files = [
       'apple peel.png',
       'bananaPeel.png',
@@ -299,6 +308,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       'Plastic Bag.png',
       'Plastic Bottle.png',
       'Tin.png',
+      'Fish Bone.png',
+      'Watermelon RInd.png',
     ];
 
     final rnd = math.Random();
@@ -322,9 +333,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
                 : Vector2(29, 29);
 
         Vector2? chosen;
-        for (var i = 0; i < 30; i++) {
+        for (var i = 0; i < 50; i++) {
           final candidate = _randomPointInPolygon(poly, rnd);
-          if (!_wouldCollideWithMap(candidate, itemSize)) {
+          if (!_wouldCollideWithMap(candidate, itemSize) &&
+              !_wouldOverlapTrash(candidate, itemSize)) {
             chosen = candidate;
             break;
           }
@@ -337,6 +349,11 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
           position: chosen,
         );
         world.add(comp);
+        _placedTrashRects.add(Rect.fromCenter(
+          center: Offset(chosen.x, chosen.y),
+          width: itemSize.x + 10,
+          height: itemSize.y + 10,
+        ));
 
         final target = _InteractionTarget(
           position: () => comp.position,
@@ -368,25 +385,23 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     }
 
     const edgeMargin = 24.0;
-    const buttonGap = 16.0;
 
-    final bottomRightX = size.x - edgeMargin - (inventoryButton.size.x / 2);
-    final bottomRightY = size.y - edgeMargin - (inventoryButton.size.y / 2);
-
-    inventoryButton.position = Vector2(bottomRightX, bottomRightY);
     interactButton.position = Vector2(
-      bottomRightX,
-      bottomRightY - inventoryButton.size.y - buttonGap,
+      size.x - edgeMargin - (interactButton.size.x / 2),
+      size.y - edgeMargin - (interactButton.size.y / 2),
     );
   }
 
   Future<void> changeMap(String newMap, [String? spawnType]) async {
+    final oldMap = currentMap;
     _isChangingMap = true;
     _heldTrashFile = null;
     if (heldItem != null) {
       heldItem!.removeFromParent();
       heldItem = null;
     }
+    rangerJack?.removeFromParent();
+    rangerJack = null;
     banana?.removeFromParent();
     banana = null;
     for (final comp in _itemTargets.keys) {
@@ -399,9 +414,11 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     _minigameState = 'idle';
     score = 0;
-    _timeRemaining = 120;
+    _timeRemaining = 60;
     _scoreText.text = '';
     _timerText.text = '';
+
+    if (oldMap == 'beach') _playMainTheme();
 
     currentMap = newMap;
     _highScoreText.text = newMap == 'beach' ? 'High Score: $highScore' : '';
@@ -413,6 +430,12 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _setupBins();
     if (newMap == 'beach') {
       await _scatterTrash();
+      if (background.jackSpawnPos != null) {
+        final jackImage = await images.load('characters/ranger_Jack.png');
+        rangerJack = RangerJackNPC(jackImage);
+        rangerJack!.position = background.jackSpawnPos!;
+        await world.add(rangerJack!);
+      }
     }
 
     _isChangingMap = false;
@@ -503,7 +526,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       height: feetSize.y,
     );
 
-    if (feetRect.overlaps(zone)) {
+    if (feetRect.overlaps(zone) && _minigameState == 'idle') {
       _minigameState = 'pending';
       _npcDialogueIndex = 0;
       dialogueBox.show(_npcName, _npcDialoguePages[0]);
@@ -529,7 +552,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     final toMuseum = background.toMuseumZone;
     if (toMuseum != null && feetRect.overlaps(toMuseum) && currentMap == 'hub') {
-      changeMap('museum');
+      changeMap('museum2');
       return;
     }
 
@@ -537,6 +560,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (toHub != null && feetRect.overlaps(toHub)) {
       if (currentMap == 'beach') changeMap('hub', 'from_beach');
       if (currentMap == 'museum') changeMap('hub', 'from_museum');
+      if (currentMap == 'museum2') changeMap('hub', 'from_museum');
     }
   }
 
@@ -721,7 +745,13 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   void _pickupItem(PositionComponent item) {
     if (heldItem != null) return;
 
-    if (_minigameState != 'active') _startMinigame();
+    if (_minigameState == 'idle' && currentMap == 'beach') {
+      _minigameState = 'pending';
+      _npcDialogueIndex = 0;
+      dialogueBox.show(_npcName, _npcDialoguePages[0]);
+    } else if (_minigameState != 'active') {
+      _startMinigame();
+    }
 
     // Remove world target for this item
     final target = _itemTargets.remove(item);
@@ -832,6 +862,17 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     }
     for (final poly in background.collisionPolys) {
       if (_rectOverlapsPolygon(rect, poly)) return true;
+    }
+    return false;
+  }
+
+  bool _wouldOverlapTrash(Vector2 centerPos, Vector2 size) {
+    final half = size / 2;
+    final rect = Rect.fromLTWH(
+      centerPos.x - half.x, centerPos.y - half.y, size.x, size.y,
+    );
+    for (final placed in _placedTrashRects) {
+      if (rect.overlaps(placed)) return true;
     }
     return false;
   }
@@ -1035,6 +1076,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       'Plastic Bag.png',
       'Plastic Bottle.png',
       'Tin.png',
+      'Fish Bone.png',
+      'Watermelon RInd.png',
     ];
 
     final rnd = math.Random();
@@ -1057,9 +1100,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
               : Vector2(29, 29);
 
       Vector2? chosen;
-      for (var i = 0; i < 30; i++) {
+      for (var i = 0; i < 50; i++) {
         final candidate = _randomPointInPolygon(poly, rnd);
-        if (!_wouldCollideWithMap(candidate, itemSize)) {
+        if (!_wouldCollideWithMap(candidate, itemSize) &&
+            !_wouldOverlapTrash(candidate, itemSize)) {
           chosen = candidate;
           break;
         }
@@ -1072,6 +1116,11 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         position: chosen,
       );
       world.add(comp);
+      _placedTrashRects.add(Rect.fromCenter(
+        center: Offset(chosen.x, chosen.y),
+        width: itemSize.x + 10,
+        height: itemSize.y + 10,
+      ));
 
       final target = _InteractionTarget(
         position: () => comp.position,
@@ -1092,9 +1141,10 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   void _startMinigame() {
     _minigameState = 'active';
     score = 0;
-    _timeRemaining = 120;
+    _timeRemaining = 60;
     _scoreText.text = 'Score: 0';
-    _timerText.text = '120';
+    _timerText.text = '60';
+    _playBossMusic();
   }
 
   void _endGame() {
@@ -1107,6 +1157,19 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _scoreText.text = '';
     _timerText.text = '';
     dialogueBox.show('Game Over', 'Your score: $score\nHigh score: $highScore');
+    _playMainTheme();
+  }
+
+  void _playMainTheme() {
+    try {
+      FlameAudio.bgm.play('mainThemeFishy.mp3', volume: 1);
+    } catch (_) {}
+  }
+
+  void _playBossMusic() {
+    try {
+      FlameAudio.bgm.play('finalBoss.mp3', volume: 0.5);
+    } catch (_) {}
   }
 
   void _showInfoBoardDialogue(String name) {

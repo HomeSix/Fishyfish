@@ -38,6 +38,7 @@ dependencies:
   flame_tiled: ^1.20.0
   tiled: ^0.10.2  # Downgrade from 0.11.0 to match flame_tiled's requirement
   shared_preferences: ^2.2.2
+  flame_audio: ^2.12.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/characters/
     - assets/trash/
     - assets/tiles/
     - assets/tilesheet/anas/
@@ -71,6 +73,7 @@ flutter:
     - assets/spreadsheet/anas/
     - assets/spreadsheet/hafiz/
     - assets/tilesheet/
+    - assets/music/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
