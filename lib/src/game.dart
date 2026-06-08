@@ -68,6 +68,27 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   ];
   int _npcDialogueIndex = 0;
 
+  static const _museumDialoguePages = [
+    "Selamat datang ke Muzium!\n"
+        "Tempat ni pamerkan haiwan-haiwan\n"
+        "yang dah pupus dan terancam.",
+    "Apa punca semua ni terjadi?\n"
+        "Sebab utama:\n"
+        "1. Kemusnahan Habitat",
+    "2. Pencemaran\n"
+        "3. Perubahan Iklim\n"
+        "4. Pemburuan & Pencerobohan",
+    "5. Spesies Asing\n"
+        "6. Pertambahan Penduduk\n"
+        "7. Eksploitasi Sumber",
+    "8. Penebangan Hutan &\n"
+        "   Pembandaran\n\n"
+        "Semua ini tangan manusia punya\n"
+        "kerja. Kita kena berubah!",
+  ];
+  int _museumDialogueIndex = 0;
+  bool _showingMuseumDialogue = false;
+
   static const _welcomeBoardName = 'Papan Utama';
   static const _welcomeBoardDialoguePages = [
     'Selamat datang ke Fishyfish!',
@@ -183,8 +204,8 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       _itemTargets[banana!] = bananaTarget;
     }
 
-    // Ranger Jack NPC - only on beach map
-    if (currentMap == 'beach' && background.jackSpawnPos != null) {
+    // Ranger Jack NPC - beach and museum2
+    if (background.jackSpawnPos != null) {
       final jackImage = await images.load('characters/ranger_Jack.png');
       rangerJack = RangerJackNPC(jackImage);
       rangerJack!.position = background.jackSpawnPos!;
@@ -216,8 +237,18 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     // Dialogue box - bottom of screen
     dialogueBox = DialogueBox(onDismissCallback: () {
       if (_activeDialoguePages != null) {
+        if (_activeDialogueIndex < _activeDialoguePages!.length - 1) {
+          _activeDialogueIndex++;
+          final name = _showingMuseumDialogue ? 'Ranger Jack' : _welcomeBoardName;
+          dialogueBox.show(name, _activeDialoguePages![_activeDialogueIndex]);
+          return;
+        }
+        final wasMuseum = _showingMuseumDialogue;
         _clearActiveDialogue();
-        overlays.add('WelcomePopup');
+        _showingMuseumDialogue = false;
+        if (!wasMuseum) {
+          overlays.add('WelcomePopup');
+        }
       }
     });
     dialogueBox.size = Vector2(size.x - 40, 180);
@@ -316,60 +347,64 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     final poly = background.trashSpawnPoly;
     if (poly == null || poly.length < 3) return;
 
+    final placements = <String>[];
     for (final file in files) {
-      for (var n = 0; n < 3; n++) {
-        try {
-        final data = await rootBundle.load('assets/trash/$file');
-        final bytes = data.buffer.asUint8List();
-        final codec = await ui.instantiateImageCodec(bytes);
-        final frame = await codec.getNextFrame();
-        final img = frame.image;
+      placements.addAll([file, file, file]);
+    }
+    placements.shuffle(rnd);
 
-        final lower = file.toLowerCase();
-        final itemSize = (lower.contains('origami') || lower.contains('crane'))
-            ? Vector2(19, 19)
-            : (lower.contains('cardboard') || lower.contains('box'))
-                ? Vector2(39, 39)
-                : Vector2(29, 29);
+    for (final file in placements) {
+      try {
+      final data = await rootBundle.load('assets/trash/$file');
+      final bytes = data.buffer.asUint8List();
+      final codec = await ui.instantiateImageCodec(bytes);
+      final frame = await codec.getNextFrame();
+      final img = frame.image;
 
-        Vector2? chosen;
-        for (var i = 0; i < 50; i++) {
-          final candidate = _randomPointInPolygon(poly, rnd);
-          if (!_wouldCollideWithMap(candidate, itemSize) &&
-              !_wouldOverlapTrash(candidate, itemSize)) {
-            chosen = candidate;
-            break;
-          }
+      final lower = file.toLowerCase();
+      final itemSize = (lower.contains('origami') || lower.contains('crane'))
+          ? Vector2(19, 19)
+          : (lower.contains('cardboard') || lower.contains('box'))
+              ? Vector2(39, 39)
+              : Vector2(29, 29);
+
+      Vector2? chosen;
+      for (var i = 0; i < 50; i++) {
+        final candidate = _randomPointInPolygon(poly, rnd);
+        if (!_wouldCollideWithMap(candidate, itemSize) &&
+            !_wouldOverlapTrash(candidate, itemSize)) {
+          chosen = candidate;
+          break;
         }
-        chosen ??= _randomPointInPolygon(poly, rnd);
-
-        final comp = BananaPeel(
-          sprite: Sprite(img),
-          size: itemSize,
-          position: chosen,
-        );
-        world.add(comp);
-        _placedTrashRects.add(Rect.fromCenter(
-          center: Offset(chosen.x, chosen.y),
-          width: itemSize.x + 10,
-          height: itemSize.y + 10,
-        ));
-
-        final target = _InteractionTarget(
-          position: () => comp.position,
-          range: 50,
-          label: 'pick up',
-          onInteract: () {
-            _pickupItem(comp);
-          },
-        );
-        _interactionTargets.add(target);
-        _itemTargets[comp] = target;
-        _trashFilenames[comp] = file;
-      } catch (e) {
-        // ignore missing assets or decode errors
       }
-      }
+      chosen ??= _randomPointInPolygon(poly, rnd);
+
+      final comp = BananaPeel(
+        sprite: Sprite(img),
+        size: itemSize,
+        position: chosen,
+      );
+      world.add(comp);
+      _placedTrashRects.add(Rect.fromCenter(
+        center: Offset(chosen.x, chosen.y),
+        width: itemSize.x + 10,
+        height: itemSize.y + 10,
+      ));
+
+      final target = _InteractionTarget(
+        position: () => comp.position,
+        range: 50,
+        label: 'pick up',
+        onInteract: () {
+          _pickupItem(comp);
+        },
+      );
+      _interactionTargets.add(target);
+      _itemTargets[comp] = target;
+      _trashFilenames[comp] = file;
+    } catch (e) {
+      // ignore missing assets or decode errors
+    }
     }
   }
 
@@ -430,12 +465,19 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _setupBins();
     if (newMap == 'beach') {
       await _scatterTrash();
-      if (background.jackSpawnPos != null) {
-        final jackImage = await images.load('characters/ranger_Jack.png');
-        rangerJack = RangerJackNPC(jackImage);
-        rangerJack!.position = background.jackSpawnPos!;
-        await world.add(rangerJack!);
-      }
+    }
+    if (background.jackSpawnPos != null) {
+      final jackImage = await images.load('characters/ranger_Jack.png');
+      rangerJack = RangerJackNPC(jackImage);
+      rangerJack!.position = background.jackSpawnPos!;
+      await world.add(rangerJack!);
+    }
+    if (newMap == 'museum2') {
+      _museumDialogueIndex = 0;
+      _showingMuseumDialogue = true;
+      _activeDialoguePages = _museumDialoguePages;
+      _activeDialogueIndex = 0;
+      dialogueBox.show('Ranger Jack', _museumDialoguePages[0]);
     }
 
     _isChangingMap = false;
@@ -663,13 +705,16 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (dialogueBox.isVisible) {
       if (_activeDialoguePages != null && _activeDialogueIndex < _activeDialoguePages!.length - 1) {
         _activeDialogueIndex++;
-        dialogueBox.show(_welcomeBoardName, _activeDialoguePages![_activeDialogueIndex]);
+        final name = _showingMuseumDialogue ? 'Ranger Jack' : _welcomeBoardName;
+        dialogueBox.show(name, _activeDialoguePages![_activeDialogueIndex]);
         return;
       }
       final wasActive = _activeDialoguePages != null;
+      final wasMuseum = _showingMuseumDialogue;
       _clearActiveDialogue();
+      _showingMuseumDialogue = false;
       dialogueBox.dismiss();
-      if (wasActive) {
+      if (wasActive && !wasMuseum) {
         overlays.add('WelcomePopup');
       }
       return;
