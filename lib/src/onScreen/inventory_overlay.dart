@@ -38,7 +38,7 @@ class InventoryOverlay extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: const Text(
-                        'Inventory',
+                        'Inventori',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20,
@@ -56,7 +56,7 @@ class InventoryOverlay extends StatelessWidget {
                             Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey),
                             SizedBox(height: 12),
                             Text(
-                              'Your inventory is empty',
+                              'Inventori anda kosong',
                               style: TextStyle(color: Colors.grey, fontSize: 15),
                             ),
                           ],
@@ -100,7 +100,7 @@ class InventoryOverlay extends StatelessWidget {
                             ),
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
-                          child: const Text('Close', style: TextStyle(fontSize: 15)),
+                          child: const Text('Tutup', style: TextStyle(fontSize: 15)),
                         ),
                       ),
                     ),

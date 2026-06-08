@@ -62,9 +62,10 @@ class DialogueBox extends PositionComponent with TapCallbacks {
     canvas.save();
     canvas.clipRRect(rRect);
 
-    final nameTp = TextPainter(
-      text: TextSpan(
-        text: name,
+      final displayName = name == 'System' ? 'Sistem' : name;
+      final nameTp = TextPainter(
+        text: TextSpan(
+          text: displayName,
         style: const TextStyle(
           color: Color(0xFFFFD700),
           fontSize: 18,
@@ -88,7 +89,7 @@ class DialogueBox extends PositionComponent with TapCallbacks {
 
     final continueTp = TextPainter(
       text: const TextSpan(
-        text: 'Tap to close',
+        text: 'Tekan untuk tutup',
         style: TextStyle(color: Colors.white38, fontSize: 12),
       ),
       textDirection: TextDirection.ltr,

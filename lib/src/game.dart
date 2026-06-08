@@ -104,6 +104,19 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     'to_museum_board': 'Laluan ini menuju ke Muzium.\n\nTeruskan perjalanan untuk ke kawasan muzium.',
   };
 
+  static const _animalDisplayNames = {
+    'dugong': 'Dugong',
+    'mammoth': 'Mammoth',
+    'dino': 'Dinosaur',
+    'tasmanian': 'Harimau Tasmania',
+    'tapir': 'Tapir',
+    'rhino': 'Badak Sumbu',
+    'orang utan': 'Orang Utan',
+    'dodo bird': 'Burung Dodo',
+    'elephant': 'Gajah',
+    'harimau malaya': 'Harimau Malaya',
+  };
+
   static const _animalDescriptions = {
     'dugong': 'Dugong adalah mamalia laut yang\n'
         'lembut dan memakan rumput laut.\n'
@@ -141,7 +154,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
         'Status: Terancam',
   };
 
-  List<String> inventory = ["test item", "mavinesh"];
+  List<String> inventory = ["item ujian", "mavinesh"];
   void addItemToInventory(String item) {
     inventory.add(item);
   }
@@ -195,7 +208,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       final bananaTarget = _InteractionTarget(
         position: () => banana!.position,
         range: 50,
-        label: 'pick up',
+        label: 'Ambil',
         onInteract: () {
           _pickupItem(banana!);
         },
@@ -318,7 +331,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     );
     _highScoreText.priority = 100;
     camera.viewport.add(_highScoreText);
-    if (currentMap == 'beach') _highScoreText.text = 'High Score: $highScore';
+    if (currentMap == 'beach') _highScoreText.text = 'Skor Tertinggi: $highScore';
 
     _startAutoSave();
     _playMainTheme();
@@ -394,7 +407,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       final target = _InteractionTarget(
         position: () => comp.position,
         range: 50,
-        label: 'pick up',
+        label: 'Ambil',
         onInteract: () {
           _pickupItem(comp);
         },
@@ -456,7 +469,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (oldMap == 'beach') _playMainTheme();
 
     currentMap = newMap;
-    _highScoreText.text = newMap == 'beach' ? 'High Score: $highScore' : '';
+    _highScoreText.text = newMap == 'beach' ? 'Skor Tertinggi: $highScore' : '';
     background = BackgroundComponent(mapName: newMap);
     background.priority = -1;
     await world.add(background);
@@ -616,7 +629,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (_isSaving) return;
     _isSaving = true;
 
-    _saveIndicator.text = 'Saving...';
+    _saveIndicator.text = 'Menyimpan...';
 
     final data = GameData(
       currentMap: currentMap,
@@ -625,7 +638,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
 
     await SaveManager.save(data);
 
-    _saveIndicator.text = 'Saved!';
+    _saveIndicator.text = 'Disimpan!';
     await Future.delayed(const Duration(seconds: 2));
     _saveIndicator.text = '';
     _isSaving = false;
@@ -691,9 +704,9 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     } else if (closestRead != null) {
       interactButton.actionText = closestRead.label;
     } else if (heldItem != null && closestBin != null) {
-      interactButton.actionText = 'sort';
+      interactButton.actionText = 'Asingkan';
     } else if (heldItem != null) {
-      interactButton.actionText = 'drop';
+      interactButton.actionText = 'Buang';
     } else if (closestOther != null) {
       interactButton.actionText = closestOther.label;
     } else {
@@ -1104,7 +1117,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       score = math.max(0, score - 1);
       dialogueBox.show('System', 'Salah tong! -1');
     }
-    _scoreText.text = 'Score: $score';
+    _scoreText.text = 'Skor: $score';
 
     heldItem!.removeFromParent();
     heldItem = null;
@@ -1170,7 +1183,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
       final target = _InteractionTarget(
         position: () => comp.position,
         range: 50,
-        label: 'pick up',
+        label: 'Ambil',
         onInteract: () {
           _pickupItem(comp);
         },
@@ -1187,7 +1200,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     _minigameState = 'active';
     score = 0;
     _timeRemaining = 60;
-    _scoreText.text = 'Score: 0';
+    _scoreText.text = 'Skor: 0';
     _timerText.text = '60';
     _playBossMusic();
   }
@@ -1197,11 +1210,11 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
     if (score > highScore) {
       highScore = score;
       SaveManager.saveHighScore(highScore);
-      _highScoreText.text = 'High Score: $highScore';
+      _highScoreText.text = 'Skor Tertinggi: $highScore';
     }
     _scoreText.text = '';
     _timerText.text = '';
-    dialogueBox.show('Game Over', 'Your score: $score\nHigh score: $highScore');
+    dialogueBox.show('Permainan Tamat', 'Skor anda: $score\nSkor Tertinggi: $highScore');
     _playMainTheme();
   }
 
@@ -1220,7 +1233,7 @@ class FishyFishGame extends FlameGame with HasCollisionDetection {
   void _showInfoBoardDialogue(String name) {
     final animalKey = name.split(' ').skip(1).join(' ');
     final desc = _animalDescriptions[animalKey];
-    final displayName = animalKey[0].toUpperCase() + animalKey.substring(1);
+    final displayName = _animalDisplayNames[animalKey] ?? animalKey;
     dialogueBox.show(displayName, desc ?? 'Tiada maklumat.');
   }
 

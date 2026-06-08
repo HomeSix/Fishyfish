@@ -59,7 +59,7 @@ Matlamat utama pemain bukan sekadar untuk bermain, tetapi untuk memulihkan Laut 
                       onPressed: () {
                         game.overlays.remove('WelcomePopup');
                       },
-                      child: const Text('Close', style: TextStyle(color: Colors.white70)),
+                      child: const Text('Tutup', style: TextStyle(color: Colors.white70)),
                     ),
                   ],
                 ),

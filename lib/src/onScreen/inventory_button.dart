@@ -34,7 +34,7 @@ class InventoryButton extends PositionComponent with TapCallbacks {
 
     final tp = TextPainter(
       text: const TextSpan(
-        text: 'Inventory',
+        text: 'Inventori',
         style: TextStyle(
           color: Colors.white,
           fontSize: 12,
@@ -54,7 +54,7 @@ class InventoryButton extends PositionComponent with TapCallbacks {
 
     final arrowTp = TextPainter(
       text: const TextSpan(
-        text: 'Tap',
+        text: 'Tekan',
         style: TextStyle(color: Colors.white70, fontSize: 9),
       ),
       textDirection: TextDirection.ltr,
